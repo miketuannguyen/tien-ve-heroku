@@ -1,0 +1,119 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "eslint-config-prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module",
+        "project": "./tsconfig.json"
+    },
+    "plugins": ["@typescript-eslint", "eslint-plugin-tsdoc"],
+    "rules": {
+        "indent": ["error", 4],
+        "linebreak-style": ["error", "unix"],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "@typescript-eslint/no-empty-function": [
+            "warn",
+            {
+                "allow": ["constructors"]
+            }
+        ],
+        "prefer-template": "error",
+        "camelcase": [
+            "error",
+            {
+                "properties": "never"
+            }
+        ],
+        "no-var": "error",
+        "@typescript-eslint/unbound-method": [
+            "error",
+            {
+                "ignoreStatic": true
+            }
+        ],
+        "require-jsdoc": [
+            "off",
+            {
+                "require": {
+                    "FunctionDeclaration": true,
+                    "MethodDefinition": true,
+                    "ClassDeclaration": false,
+                    "ArrowFunctionExpression": true,
+                    "FunctionExpression": true
+                }
+            }
+        ],
+        "@typescript-eslint/member-ordering": [
+            "error",
+            {
+                "default": [
+                    "public-static-field",
+                    "protected-static-field",
+                    "private-static-field",
+                    "public-instance-field",
+                    "protected-instance-field",
+                    "private-instance-field",
+                    "constructor",
+                    "public-static-method",
+                    "protected-static-method",
+                    "private-static-method",
+                    "public-instance-method",
+                    "protected-instance-method",
+                    "private-instance-method"
+                ]
+            }
+        ],
+        "@typescript-eslint/strict-boolean-expressions": "warn",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/no-shadow": ["error"],
+        "@typescript-eslint/no-unnecessary-condition": "off",
+        "@typescript-eslint/prefer-nullish-coalescing": "error",
+        "@typescript-eslint/prefer-optional-chain": "error",
+        "arrow-body-style": "error",
+        "curly": "off",
+        "eqeqeq": ["error", "always", { "null": "ignore" }],
+        "guard-for-in": "error",
+        "no-bitwise": "error",
+        "no-caller": "error",
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "no-eval": "error",
+        "no-labels": "error",
+        "no-new": "error",
+        "no-new-wrappers": "error",
+        "object-shorthand": ["error", "always", { "avoidExplicitReturnArrows": true }],
+        "radix": "error",
+        "spaced-comment": ["warn", "always"],
+        "tsdoc/syntax": "error",
+        "keyword-spacing": "error",
+        "block-spacing": "error",
+        "key-spacing": "error",
+        "space-before-blocks": "error",
+        "no-alert": "error",
+        "no-useless-return": "error",
+        "no-else-return": "error",
+        "no-trailing-spaces": "error",
+        "comma-dangle": "off",
+        "comma-spacing": "error",
+        "@typescript-eslint/ban-types": [
+            "error",
+            {
+                "types": {
+                    "Function": false
+                },
+                "extendDefaults": true
+            }
+        ],
+        "@typescript-eslint/no-misused-promises": "off"
+    }
+}

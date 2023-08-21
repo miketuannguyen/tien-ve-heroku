@@ -8,6 +8,7 @@ const ROUTES = {
     MESSAGE: {
         MODULE: 'message',
         CREATE: '',
+        LIST: '',
     },
 } as const;
 Helpers.deepFreeze(ROUTES);

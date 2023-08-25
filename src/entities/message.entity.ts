@@ -11,6 +11,10 @@ export class MessageEntity {
     @AutoMap()
         address: string;
 
+    @Column({ type: 'varchar', length: 255 })
+    @AutoMap()
+        phone: string;
+
     @Column({ type: 'text' })
     @AutoMap()
         body: string;
@@ -18,6 +22,10 @@ export class MessageEntity {
     @Column({ type: 'datetime' })
     @AutoMap()
         send_date: string;
+
+    @Column({ type: 'datetime' })
+    @AutoMap()
+        receive_date: string;
 
     @Column({ type: 'tinyint', default: 0 })
     @AutoMap()

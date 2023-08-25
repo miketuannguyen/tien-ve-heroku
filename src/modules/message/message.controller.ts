@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Post, Query, Res } from '@nestjs/common';
 import * as dayjs from 'dayjs';
 import { Response } from 'express';
-import { MessageDTO } from 'src/dtos';
+import { CreateMessageDTO, MessageDTO } from 'src/dtos';
 import { BaseController } from 'src/includes';
 import { APIListResponse, APIResponse, CONSTANTS, Helpers, MESSAGES } from 'src/utils';
 import { CommonSearchQuery } from 'src/utils/types';
@@ -16,12 +16,14 @@ export class MessageController extends BaseController {
     }
 
     @Post(ROUTES.MESSAGE.CREATE)
-    public async create(@Res() res: Response<APIResponse<MessageDTO | null>>, @Body() body: { address: string; body: string; send_date: number }) {
+    public async create(@Res() res: Response<APIResponse<MessageDTO | null>>, @Body() body: CreateMessageDTO) {
         try {
             const message = new MessageDTO();
             message.address = body.address || '';
+            message.phone = body.phone || '';
             message.body = body.body || '';
             message.send_date = dayjs(Number(body.send_date) || 0).format(CONSTANTS.MYSQL_DATETIME_FORMAT);
+            message.receive_date = dayjs(Number(body.receive_date) || 0).format(CONSTANTS.MYSQL_DATETIME_FORMAT);
 
             const result = await this._messageService.create(message);
             if (Helpers.isEmptyObject(result)) {

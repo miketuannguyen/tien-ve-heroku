@@ -1,27 +1,32 @@
 import { AutoMap } from '@automapper/classes';
+import { CONSTANTS } from 'src/utils';
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('m_users')
-export class UserEntity {
+@Entity('d_otps')
+export class OtpEntity {
     @PrimaryGeneratedColumn('increment', { type: 'bigint' })
     @AutoMap()
         id: number;
 
-    @Column({ type: 'varchar', length: 255, nullable: true })
+    @Column({ type: 'varchar', length: CONSTANTS.OTP.LENGTH })
     @AutoMap()
-        email: string;
+        otp: string;
 
-    @Column({ type: 'varchar', length: 20, nullable: true })
+    @Column({ type: 'varchar', length: 255 })
     @AutoMap()
-        phone: string;
+        receive_address: string;
 
-    @Column({ type: 'varchar', length: 255, nullable: true })
+    @Column({ type: 'datetime' })
     @AutoMap()
-        name: string;
+        expired_date: string;
 
-    @Column({ type: 'tinyint', default: 1 })
+    @Column({ type: 'tinyint', default: 0 })
     @AutoMap()
-        is_active: 0 | 1;
+        is_used: 0 | 1;
+
+    @Column({ type: 'tinyint' })
+    @AutoMap()
+        type: number;
 
     @CreateDateColumn({ type: 'datetime' })
     @AutoMap()

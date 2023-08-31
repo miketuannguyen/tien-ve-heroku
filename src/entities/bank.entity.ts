@@ -1,27 +1,23 @@
 import { AutoMap } from '@automapper/classes';
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('m_users')
-export class UserEntity {
+@Entity('m_banks')
+export class BankEntity {
     @PrimaryGeneratedColumn('increment', { type: 'bigint' })
     @AutoMap()
         id: number;
 
-    @Column({ type: 'varchar', length: 255, nullable: true })
+    @Column({ type: 'varchar', length: 100 })
     @AutoMap()
-        email: string;
+        brand_name: string;
 
-    @Column({ type: 'varchar', length: 20, nullable: true })
-    @AutoMap()
-        phone: string;
-
-    @Column({ type: 'varchar', length: 255, nullable: true })
+    @Column({ type: 'varchar', length: 255 })
     @AutoMap()
         name: string;
 
     @Column({ type: 'tinyint', default: 1 })
     @AutoMap()
-        is_active: 0 | 1;
+        is_deleted: 0 | 1;
 
     @CreateDateColumn({ type: 'datetime' })
     @AutoMap()

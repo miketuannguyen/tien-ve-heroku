@@ -3,10 +3,11 @@ import { AutoMap } from '@automapper/classes';
 import { Helpers } from '../utils';
 
 export class UserDTO {
-    @AutoMap() username: string;
+    @AutoMap() id: number;
+    @AutoMap() email: string;
+    @AutoMap() phone: string;
     @AutoMap() name: string;
     @AutoMap() is_active: 0 | 1;
-    @AutoMap() role: 0 | 1;
     @AutoMap() created_date: string;
     @AutoMap() updated_date: string;
 
@@ -21,7 +22,7 @@ export class UserDTO {
         return (
             data !== null &&
             typeof data === 'object' &&
-            Helpers.isString(data?.username) &&
+            !!data?.id &&
             (Number(data?.is_active) === 1 || Number(data?.is_active) === 0) &&
             Helpers.isString(data?.created_date) &&
             Helpers.isString(data?.updated_date)
@@ -29,9 +30,12 @@ export class UserDTO {
     }
 }
 
-export class UserSaveDTO {
-    @AutoMap() username: string;
-    @AutoMap() name: string;
-    @AutoMap() password: string;
-    @AutoMap() is_active: 0 | 1;
+export class LoginUserDTO extends UserDTO {
+    public access_token: string;
+}
+
+export class SaveAccountDTO {
+    email: string;
+    phone: string;
+    name: string;
 }

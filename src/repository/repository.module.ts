@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { MessageRepository } from './message.repository';
-import { UserRepository } from './user.repository';
+import { OtpRepository, MessageRepository, UserRepository } from './index';
 
 @Module({
-    providers: [UserRepository, MessageRepository],
-    exports: [UserRepository, MessageRepository],
+    providers: [UserRepository, MessageRepository, OtpRepository],
+    exports: [UserRepository, MessageRepository, OtpRepository],
 })
 export class RepositoryModule {}

@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
-import { UserDTO } from 'src/dtos';
+import { LoginUserDTO, UserDTO } from 'src/dtos';
 import { UserEntity } from 'src/entities';
 import { BaseService } from 'src/includes';
 import { UserRepository } from 'src/repository';
 import { CONSTANTS, Helpers } from 'src/utils';
 import { mapper } from 'src/utils/mapper';
+import { ValueOf } from 'src/utils/types';
 
 @Injectable()
 export class AuthService extends BaseService {
@@ -14,36 +15,37 @@ export class AuthService extends BaseService {
         super();
     }
 
-    /**
-     * Login user
-     * @param username - `m_users.username`
-     * @param password - `m_users.password`
-     * @returns user entity
-     */
-    public async login(username: string, password: string): Promise<(UserDTO & { access_token: string }) | null> {
+    public async login(emailPhone: string, type: ValueOf<typeof CONSTANTS.LOGIN_TYPES>): Promise<LoginUserDTO | null> {
         const secret = process.env.ACCESS_TOKEN_SECRET;
         if (!Helpers.isString(secret)) return null;
 
-        const user = await this._userRepo.findOneBy({ username });
-        if (Helpers.isEmptyObject(user)) return null;
-        if (user?.password !== password) return null;
+        const userEntity =
+            type === CONSTANTS.LOGIN_TYPES.EMAIL
+                ? await this._userRepo.findOneBy({ email: emailPhone })
+                : await this._userRepo.findOneBy({ phone: emailPhone });
+        if (Helpers.isEmptyObject(userEntity)) return null;
 
-        const userDTO = mapper.map(user, UserEntity, UserDTO);
+        const userDTO = mapper.map(userEntity, UserEntity, UserDTO);
 
         // jwt need userDTO to be plain object
         const accessToken = jwt.sign({ ...userDTO }, secret, { expiresIn: CONSTANTS.ACCESS_TOKEN_EXPIRED_TIME });
 
-        return { ...userDTO, access_token: accessToken };
+        const loginUserDTO = new LoginUserDTO();
+        loginUserDTO.id = userDTO.id;
+        loginUserDTO.email = userDTO.email;
+        loginUserDTO.phone = userDTO.phone;
+        loginUserDTO.name = userDTO.name;
+        loginUserDTO.is_active = userDTO.is_active;
+        loginUserDTO.created_date = userDTO.created_date;
+        loginUserDTO.updated_date = userDTO.updated_date;
+        loginUserDTO.access_token = accessToken;
+        return loginUserDTO;
     }
 
-    /**
-     * Find user by username
-     * @param username - `m_users.username`
-     */
-    public async findUserByUsername(username: string) {
-        if (!Helpers.isString(username)) return null;
+    public async findUserById(id: number) {
+        if (!Helpers.isString(id)) return null;
 
-        const user = await this._userRepo.findOneBy({ username });
+        const user = await this._userRepo.findOneBy({ id });
         if (Helpers.isEmptyObject(user)) return null;
 
         return mapper.map(user, UserEntity, UserDTO);

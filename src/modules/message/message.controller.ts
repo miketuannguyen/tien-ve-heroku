@@ -16,7 +16,7 @@ export class MessageController extends BaseController {
     }
 
     @Post(ROUTES.MESSAGE.CREATE)
-    public async create(@Res() res: Response<APIResponse<MessageDTO | null>>, @Body() body: CreateMessageDTO) {
+    public async create(@Res() res: Response<APIResponse<MessageDTO | undefined>>, @Body() body: CreateMessageDTO) {
         try {
             const message = new MessageDTO();
             message.address = body.address || '';
@@ -27,11 +27,11 @@ export class MessageController extends BaseController {
 
             const result = await this._messageService.create(message);
             if (Helpers.isEmptyObject(result)) {
-                const errRes = APIResponse.error<null>(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+                const errRes = APIResponse.error<undefined>(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
                 return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
             }
 
-            const successRes = APIResponse.success<MessageDTO | null>(MESSAGES.SUCCESS.SUCCESS, result);
+            const successRes = APIResponse.success<MessageDTO | undefined>(MESSAGES.SUCCESS.SUCCESS);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
             this._logger.error(this.create.name, e);

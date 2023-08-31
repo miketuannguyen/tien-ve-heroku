@@ -29,7 +29,7 @@ export class APIResponse<T> {
      * @param data - error data
      * @param errors - validation errors
      */
-    public static error<T = null>(
+    public static error<T = undefined>(
         message: ValueOf<typeof MESSAGES.ERROR>,
         data?: T,
         errors?: { [key: string]: string },

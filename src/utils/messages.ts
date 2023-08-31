@@ -23,6 +23,12 @@ const MESSAGES = {
         ERR_INVALID_REQUEST_BODY: 'err_invalid_request_body',
         ERR_USERNAME_EXISTED: 'err_username_existed',
         ERR_USER_DEACTIVATED: 'err_user_deactivated',
+        ERR_OTP_USED: 'err_otp_used',
+        ERR_OTP_EXPIRED: 'err_otp_expired',
+        ERR_OTP_NOT_VALID: 'err_otp_not_valid',
+        ERR_CHECK_OTP: 'err_check_otp',
+        ERR_EMAIL_EXISTS: 'err_email_exists',
+        ERR_PHONE_EXISTS: 'err_phone_exists',
     },
 } as const;
 

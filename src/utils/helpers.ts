@@ -1,3 +1,4 @@
+import { CONSTANTS } from 'src/utils';
 import * as dayjs from 'dayjs';
 import { AnySchema, ArraySchema, ObjectSchema } from 'joi';
 
@@ -97,7 +98,7 @@ export default class Helpers {
         return dayjs(date).format(toFormat);
     }
 
-    static getDateListInRange(startDate: string, endDate: string, toFormat = 'DD/MM/YYYY', unit: 'day' | 'month' = 'day') {
+    static getDateListInRange(startDate: string, endDate: string, unit: 'day' | 'month' = 'day') {
         const start = dayjs(startDate).startOf(unit);
         const end = dayjs(endDate).startOf(unit);
 
@@ -111,5 +112,17 @@ export default class Helpers {
         }
 
         return dateList;
+    }
+
+    static generateOTP(length = CONSTANTS.OTP.LENGTH): string {
+        const digits = '0123456789';
+        let otp = '';
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * digits.length);
+            otp += digits[randomIndex];
+        }
+
+        return otp;
     }
 }

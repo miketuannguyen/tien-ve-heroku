@@ -1,0 +1,59 @@
+$primaryColor: #d82d8b;
+$dangerColor: #ad000b;
+$tertiaryColor: #9880ff;
+$grayColor: #5a5c69;
+
+.btn-primary {
+    background-color: $primaryColor !important;
+    border-color: $primaryColor !important;
+}
+
+.bg-primary {
+    background-color: $primaryColor !important;
+}
+
+.text-danger {
+    color: $dangerColor !important;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.custom-switch.custom-switch-on-primary .custom-control-input:checked~.custom-control-label::before {
+    background-color: $primaryColor;
+    border-color: $primaryColor;
+}
+
+.page-item.active .page-link {
+    background-color: $primaryColor;
+    color: white;
+}
+
+.page-item .page-link {
+    background-color: white;
+    color: $primaryColor;
+}
+
+.text-primary {
+    color: $primaryColor !important;
+}
+
+ngb-pagination .pagination {
+    margin-bottom: 0;
+}
+
+.brand-image {
+    height: 130px;
+    width: auto;
+}
+
+.sidebar-collapse .brand-image {
+    height: 45px !important;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+    border-color: $primaryColor;
+    background-color: $primaryColor;
+}

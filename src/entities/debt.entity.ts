@@ -1,32 +1,36 @@
 import { AutoMap } from '@automapper/classes';
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
-@Entity('d_messages')
-export class MessageEntity extends BaseEntity {
-    @PrimaryGeneratedColumn('increment', { type: 'bigint' })
+@Entity('d_debts')
+export class DebtEntity extends BaseEntity {
+    @PrimaryColumn({ type: 'varchar', length: 25 })
     @AutoMap()
-        id: number;
+        id: string;
+
+    @Column({ type: 'bigint' })
+    @AutoMap()
+        user_id: number;
+
+    @Column({ type: 'bigint' })
+    @AutoMap()
+        bank_account_id: number;
 
     @Column({ type: 'varchar', length: 255 })
     @AutoMap()
-        address: string;
+        payer_name: string;
 
-    @Column({ type: 'varchar', length: 20 }) // Số điện thoại do app lấy được chưa được format
+    @Column({ type: 'varchar', length: BaseEntity.PHONE_ML })
     @AutoMap()
-        phone: string;
+        payer_phone: string;
 
-    @Column({ type: 'text' })
+    @Column({ type: 'decimal', precision: 15, scale: 3 })
     @AutoMap()
-        body: string;
+        amount: number;
 
-    @Column({ type: 'datetime' })
+    @Column({ type: 'varchar', length: 255 })
     @AutoMap()
-        send_date: string;
-
-    @Column({ type: 'datetime' })
-    @AutoMap()
-        receive_date: string;
+        note: string;
 
     @Column({ type: 'tinyint', default: 0 })
     @AutoMap()

@@ -1,8 +1,9 @@
 import { AutoMap } from '@automapper/classes';
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity } from './base.entity';
 
 @Entity('m_banks')
-export class BankEntity {
+export class BankEntity extends BaseEntity {
     @PrimaryGeneratedColumn('increment', { type: 'bigint' })
     @AutoMap()
         id: number;

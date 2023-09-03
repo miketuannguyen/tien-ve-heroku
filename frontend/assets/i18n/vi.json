@@ -41,7 +41,16 @@
         "input": "Nhập",
         "continue": "Tiếp tục",
         "otp_code": "Mã xác nhận",
-        "back": "Quay lại"
+        "back": "Quay lại",
+        "choose_file": "Chọn file",
+        "delete_all": "Xóa tất cả",
+        "download_template_file": "Tải file mẫu",
+        "bank_account": "Tài khoản ngân hàng",
+        "payer_name": "Tên người trả tiền",
+        "payer_phone": "SĐT người trả tiền",
+        "amount": "Số tiền nợ",
+        "receive_money_account": "Tài khoản nhận tiền",
+        "note": "Ghi chú"
     },
     "validation": {
         "required": "Vui lòng nhập {{item}}",
@@ -52,7 +61,10 @@
         "password": "{{field}} không chứa ký tự đặc biệt.",
         "match": "\"{{name1}}\" và \"{{name2}}\" phải giống nhau.",
         "email": "Hãy nhập địa chỉ email hợp lệ",
-        "phone": "Hãy nhập số điện thoại hợp lệ"
+        "phone": "Hãy nhập số điện thoại hợp lệ",
+        "max_file_count": "Chỉ có thể chọn tối đa {{num}} files",
+        "invalid_file_type": "File {{name}} không đúng định dạng, đã bị xóa bỏ khỏi danh sách. Định dạng cho phép: {{types}}.",
+        "invalid_file_size": "File {{name}} có dung lượng lơn hơn {{max}}MB, đã bị xóa bỏ khỏi danh sách."
     },
     "message": {
         "success": "Thành công",

@@ -57,3 +57,15 @@ ngb-pagination .pagination {
     border-color: $primaryColor;
     background-color: $primaryColor;
 }
+
+.btn-danger {
+    background-color: $dangerColor !important;
+}
+
+.border-danger {
+    border-color: $dangerColor !important;
+}
+
+ng-select.border-danger div {
+    border-color: $dangerColor !important;
+}

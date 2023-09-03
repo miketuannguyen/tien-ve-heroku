@@ -31,6 +31,13 @@ const ROUTES = {
         UPDATE: ':id',
         DELETE: ':id',
     },
+    DEBT: {
+        MODULE: 'debt',
+        LIST: '',
+        DETAIL: ':id',
+        CREATE_MULTIPLE: 'multiple',
+        DELETE: ':id',
+    },
 } as const;
 Helpers.deepFreeze(ROUTES);
 

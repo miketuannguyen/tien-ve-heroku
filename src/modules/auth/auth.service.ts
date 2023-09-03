@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 import { LoginUserDTO, UserDTO } from 'src/dtos';
 import { UserEntity } from 'src/entities';
@@ -11,7 +12,7 @@ import { ValueOf } from 'src/utils/types';
 @Injectable()
 export class AuthService extends BaseService {
     /** Constructor */
-    constructor(private readonly _userRepo: UserRepository) {
+    constructor(private readonly _userRepo: UserRepository, private readonly _configService: ConfigService) {
         super();
     }
 
@@ -28,7 +29,8 @@ export class AuthService extends BaseService {
         const userDTO = mapper.map(userEntity, UserEntity, UserDTO);
 
         // jwt need userDTO to be plain object
-        const accessToken = jwt.sign({ ...userDTO }, secret, { expiresIn: CONSTANTS.ACCESS_TOKEN_EXPIRED_TIME });
+        const expiredTime = Number(this._configService.get('ACCESS_TOKEN_EXPIRED_TIME')) || 0;
+        const accessToken = jwt.sign({ ...userDTO }, secret, { expiresIn: expiredTime });
 
         const loginUserDTO = new LoginUserDTO();
         loginUserDTO.id = userDTO.id;

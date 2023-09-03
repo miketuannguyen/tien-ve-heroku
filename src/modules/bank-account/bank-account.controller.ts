@@ -17,10 +17,10 @@ export class BankAccountController extends BaseController {
     @Get(ROUTES.BANK_ACCOUNT.LIST)
     public async getList(@Req() req: AuthenticatedRequest, @Res() res: Response<APIListResponse<BankAccountDTO>>, @Query() query: CommonSearchQuery) {
         try {
-            const total = await this._bankAccountService.getTotal();
+            const total = await this._bankAccountService.getTotal(req.userPayload.id);
             let list: BankAccountDTO[] = [];
             if (total > 0) {
-                list = await this._bankAccountService.getList(query);
+                list = await this._bankAccountService.getList(query, req.userPayload.id);
                 if (!Helpers.isFilledArray(list)) {
                     const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_NO_DATA, []);
                     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);

@@ -13,7 +13,7 @@ export class BankAccountService extends BaseService {
         super();
     }
 
-    public async getList(params: CommonSearchQuery) {
+    public async getList(params: CommonSearchQuery, userId: number) {
         const query = this._bankAccountRepo
             .createQueryBuilder('bank_account')
             .select('bank_account.*')
@@ -21,6 +21,7 @@ export class BankAccountService extends BaseService {
             .addSelect('bank.name as bank_name')
             .leftJoin('m_banks', 'bank', 'bank.id = bank_account.bank_id')
             .where('bank_account.is_deleted = 0')
+            .where('bank_account.user_id = :user_id', { user_id: userId })
             .orderBy('bank_account.id', 'DESC');
 
         if (Number(params?.page) > 0) {
@@ -33,8 +34,11 @@ export class BankAccountService extends BaseService {
         return Helpers.isFilledArray(list) ? list : [];
     }
 
-    public async getTotal() {
-        const query = this._bankAccountRepo.createQueryBuilder('bank_account').where('bank_account.is_deleted = 0');
+    public async getTotal(userId: number) {
+        const query = this._bankAccountRepo
+            .createQueryBuilder('bank_account')
+            .where('bank_account.is_deleted = 0')
+            .where('bank_account.user_id = :user_id', { user_id: userId });
 
         return query.getCount();
     }

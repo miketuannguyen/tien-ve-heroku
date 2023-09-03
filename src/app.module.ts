@@ -23,6 +23,8 @@ import { BankModule } from './modules/bank/bank.module';
 import { BankAccountModule } from './modules/bank-account/bank-account.module';
 import { BankController } from './modules/bank/bank.controller';
 import { BankAccountController } from './modules/bank-account/bank-account.controller';
+import { DebtModule } from './modules/debt/debt.module';
+import { DebtController } from './modules/debt/debt.controller';
 
 @Module({
     imports: [
@@ -40,6 +42,7 @@ import { BankAccountController } from './modules/bank-account/bank-account.contr
         OtpModule,
         BankModule,
         BankAccountModule,
+        DebtModule,
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
@@ -74,6 +77,6 @@ export class AppModule {
      */
     configure(consumer: MiddlewareConsumer) {
         consumer.apply(AuthMiddleware).exclude(`/${ROUTES.AUTH.MODULE}/${ROUTES.AUTH.LOGIN_OTP}`).forRoutes(AuthController);
-        consumer.apply(AuthMiddleware).forRoutes(UserController, BankController, BankAccountController);
+        consumer.apply(AuthMiddleware).forRoutes(UserController, BankController, BankAccountController, DebtController);
     }
 }

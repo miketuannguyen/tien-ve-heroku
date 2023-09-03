@@ -1,9 +1,10 @@
 import { AutoMap } from '@automapper/classes';
 import { CONSTANTS } from 'src/utils';
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity } from './base.entity';
 
 @Entity('d_otps')
-export class OtpEntity {
+export class OtpEntity extends BaseEntity {
     @PrimaryGeneratedColumn('increment', { type: 'bigint' })
     @AutoMap()
         id: number;

@@ -20,4 +20,14 @@ export class BankService extends BaseService {
 
         return list.map((item) => mapper.map(item, BankEntity, BankDTO));
     }
+
+    public async isBrandNameExist(brandName: string) {
+        const query = this._bankRepo
+            .createQueryBuilder('bank')
+            .where('LOWER(bank.brand_name) = :brand_name', { brand_name: brandName })
+            .andWhere('bank.is_deleted = 0');
+
+        const item = await query.getOne();
+        return item ? true : false;
+    }
 }

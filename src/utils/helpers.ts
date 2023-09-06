@@ -125,4 +125,45 @@ export default class Helpers {
 
         return otp;
     }
+
+    /**
+     * Extract all numbers in a string by using regex to replace non-numeric characters
+     * @param str - any string or number (which maybe set to string during runtime), not being mutated
+     * @returns a number that is a combination of all numbers in the sequence from left to right, 0 if error
+     * @example
+     * ```typescript
+     * const str = "110ab122cd";
+     * const num = Lib.extractNumberFromString(str); //110122
+     * ```
+     */
+    public static extractNumberFromString(str: string | number | null | undefined): number {
+        if (typeof str === 'number') return str;
+        if (!Helpers.isString(str)) return 0;
+
+        const copy = str ? String(str) : '';
+        const result = copy.replace(/[^0-9.]*/g, '');
+        const resultNum = Number(result) ? Number(result) : 0;
+        return String(str).startsWith('-') ? -resultNum : resultNum;
+    }
+
+    public static getSubstringBetweenStartEnd(inputString: string, start: string, end: string): string | null {
+        const startIdx = inputString.indexOf(start);
+        const endIdx = inputString.indexOf(end);
+
+        if (startIdx !== -1 && endIdx !== -1 && startIdx < endIdx) {
+            return inputString.substring(startIdx + 1, endIdx);
+        }
+
+        return null;
+    }
+
+    public static getSubstringFromStart(inputString: string, start: string, length: number): string | null {
+        const startIdx = inputString.indexOf(start);
+
+        if (startIdx !== -1) {
+            return inputString.substring(startIdx, startIdx + 1 + length);
+        }
+
+        return null;
+    }
 }

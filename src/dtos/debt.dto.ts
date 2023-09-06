@@ -1,4 +1,5 @@
 import { AutoMap } from '@automapper/classes';
+import { CommonSearchQuery } from 'src/utils/types';
 
 export class DebtDTO {
     @AutoMap() id: string;
@@ -20,3 +21,30 @@ export class SaveDebtDTO {
     public amount = 0;
     public note = '';
 }
+
+export class DebtListDTO extends DebtDTO {
+    public paid_amount?: number;
+    public bank_account_number?: string;
+    public bank_brand_name?: string;
+}
+
+export class DebtDetailDTO extends DebtDTO {
+    public paid_amount?: number;
+    public bank_account_bank_id?: number;
+    public bank_account_user_id?: number;
+    public bank_account_phone?: string;
+    public bank_account_branch_name?: string;
+    public bank_account_card_owner?: string;
+    public bank_account_number?: string;
+    public bank_account_name?: string;
+    public bank_brand_name?: string;
+}
+
+export type DebtSearchQuery = CommonSearchQuery & {
+    min_amount?: number;
+    max_amount?: number;
+    start_date?: string;
+    end_date?: string;
+    is_paid?: boolean;
+    is_not_paid?: boolean;
+};

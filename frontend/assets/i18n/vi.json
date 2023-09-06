@@ -50,7 +50,11 @@
         "payer_phone": "SĐT người trả tiền",
         "amount": "Số tiền nợ",
         "receive_money_account": "Tài khoản nhận tiền",
-        "note": "Ghi chú"
+        "note": "Ghi chú",
+        "completed": "Đã hoàn thành",
+        "not_completed": "Chưa hoàn thành",
+        "general_info": "Thông tin chung",
+        "created_date": "Ngày tạo"
     },
     "validation": {
         "required": "Vui lòng nhập {{item}}",

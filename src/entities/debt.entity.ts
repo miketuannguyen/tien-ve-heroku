@@ -4,7 +4,7 @@ import { BaseEntity } from './base.entity';
 
 @Entity('d_debts')
 export class DebtEntity extends BaseEntity {
-    @PrimaryColumn({ type: 'varchar', length: 25 })
+    @PrimaryColumn({ type: 'varchar', length: 25 }) // 25 cho dư dả
     @AutoMap()
         id: string;
 

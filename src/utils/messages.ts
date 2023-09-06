@@ -29,6 +29,8 @@ const MESSAGES = {
         ERR_CHECK_OTP: 'err_check_otp',
         ERR_EMAIL_EXISTS: 'err_email_exists',
         ERR_PHONE_EXISTS: 'err_phone_exists',
+        ERR_NOT_BANK_SMS: 'err_not_bank_sms',
+        ERR_SMS_AMOUNT_NOT_POSITIVE: 'err_sms_amount_not_positive',
     },
 } as const;
 

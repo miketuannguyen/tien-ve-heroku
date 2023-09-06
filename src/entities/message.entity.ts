@@ -28,6 +28,14 @@ export class MessageEntity extends BaseEntity {
     @AutoMap()
         receive_date: string;
 
+    @Column({ type: 'varchar', length: 25, nullable: true })
+    @AutoMap()
+        debt_id: string | null;
+
+    @Column({ type: 'decimal', precision: 15, scale: 3 })
+    @AutoMap()
+        amount: number;
+
     @Column({ type: 'tinyint', default: 0 })
     @AutoMap()
         is_deleted: 0 | 1;

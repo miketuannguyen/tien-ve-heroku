@@ -36,7 +36,9 @@ const CONSTANTS = {
         DATE_FORMAT: 'DDMMYY',
         USER_ID_LENGTH: 5,
         AUTO_INCREMENT_LENGTH: 5,
+        LENGTH: 21,
     },
+    VN_PHONE_CODE: '84+84',
 } as const;
 Helpers.deepFreeze(CONSTANTS);
 

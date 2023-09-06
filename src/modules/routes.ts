@@ -10,6 +10,7 @@ const ROUTES = {
         MODULE: 'message',
         CREATE: '',
         LIST: '',
+        UPDATE_DEBT_ID: ':id/update-debt-id',
     },
     USER: {
         MODULE: 'user',

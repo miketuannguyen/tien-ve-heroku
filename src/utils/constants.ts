@@ -39,6 +39,9 @@ const CONSTANTS = {
         LENGTH: 21,
     },
     VN_PHONE_CODE: '84+84',
+    ESMS_URL: {
+        OTP_SMS: 'http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_post_json/',
+    },
 } as const;
 Helpers.deepFreeze(CONSTANTS);
 

@@ -12,11 +12,10 @@ export class SMSService extends BaseService {
     }
 
     async sendOTP(phone: string, otp: string) {
-        const esmsUrl = String(this._configService.get('ESMS_URL'));
         const esmsApiKey = String(this._configService.get('ESMS_API_KEY'));
         const esmsSecretKey = String(this._configService.get('ESMS_SECRET_KEY'));
         const esmsBrandName = String(this._configService.get('ESMS_BRAND_NAME'));
-        const esmsSandBox = this._configService.get('ESMS_SAND_BOX') ? 1 : 0;
+        const esmsSandBox = Number(this._configService.get('ESMS_SAND_BOX')) ? 1 : 0;
 
         // eSMS chỉ support gửi type này: tin Chăm sóc khách hàng
         const customerSupportSMSType = '2';
@@ -28,7 +27,7 @@ export class SMSService extends BaseService {
             Unicode: 1,
             Brandname: esmsBrandName,
             SmsType: customerSupportSMSType,
-            SandBox: esmsSandBox,
+            Sandbox: esmsSandBox,
         };
 
         const result = await firstValueFrom(
@@ -36,7 +35,7 @@ export class SMSService extends BaseService {
                 CodeResult: string;
                 CountRegenerate: number;
                 SMSID: string;
-            }>(esmsUrl, params, { headers: { 'Content-Type': 'application/json' } }),
+            }>(CONSTANTS.ESMS_URL.OTP_SMS, params, { headers: { 'Content-Type': 'application/json' } }),
         );
 
         const isSuccess = String(result.data?.CodeResult) === CONSTANTS.SMS_SUCCESS_CODE;

@@ -29,11 +29,11 @@ export class OtpController extends BaseController {
             otp.expired_date = dayjs().add(CONSTANTS.OTP.EXPIRED_SECONDS, 'seconds').format(CONSTANTS.MYSQL_DATETIME_FORMAT);
             otp.is_used = 0;
 
-            if (body.type === CONSTANTS.LOGIN_TYPES.EMAIL) {
+            if (body.type === CONSTANTS.REGISTER_TYPES.EMAIL) {
                 await this._mailService.sendOTP(body.receive_address, otp.otp);
             }
 
-            if (body.type === CONSTANTS.LOGIN_TYPES.PHONE) {
+            if (body.type === CONSTANTS.REGISTER_TYPES.PHONE) {
                 const isSuccess = await this._smsService.sendOTP(body.receive_address, otp.otp);
                 if (!isSuccess) {
                     const errRes = APIResponse.error<undefined>(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);

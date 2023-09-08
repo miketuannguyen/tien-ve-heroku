@@ -4,7 +4,7 @@ import { ValueOf } from 'src/utils/types';
 
 export const createSchema = Joi.object<{
     receive_address: string;
-    type: ValueOf<typeof CONSTANTS.LOGIN_TYPES>;
+    type: ValueOf<typeof CONSTANTS.REGISTER_TYPES>;
 }>({
     receive_address: Joi.string().required().messages({
         'any.required': 'required',

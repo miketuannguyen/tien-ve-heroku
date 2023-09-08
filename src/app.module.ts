@@ -76,7 +76,16 @@ export class AppModule {
      * Configure middlewares
      */
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(AuthMiddleware).exclude(`/${ROUTES.AUTH.MODULE}/${ROUTES.AUTH.LOGIN_OTP}`).forRoutes(AuthController);
-        consumer.apply(AuthMiddleware).forRoutes(UserController, BankController, BankAccountController, DebtController);
+        const authExcludeRouteList = [`/${ROUTES.AUTH.MODULE}/${ROUTES.AUTH.LOGIN}`, `/${ROUTES.AUTH.MODULE}/${ROUTES.AUTH.REGISTER}`];
+        const userExcludeRouteList = [`/${ROUTES.USER.MODULE}/${ROUTES.USER.GET_BY_EMAIL_PHONE}`];
+        consumer
+            .apply(AuthMiddleware)
+            .exclude(...authExcludeRouteList)
+            .forRoutes(AuthController);
+        consumer
+            .apply(AuthMiddleware)
+            .exclude(...userExcludeRouteList)
+            .forRoutes(UserController);
+        consumer.apply(AuthMiddleware).forRoutes(BankController, BankAccountController, DebtController);
     }
 }

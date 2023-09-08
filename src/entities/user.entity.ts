@@ -20,6 +20,10 @@ export class UserEntity extends BaseEntity {
     @AutoMap()
         name: string;
 
+    @Column({ type: 'varchar', length: 255 })
+    @AutoMap()
+        password: string;
+
     @Column({ type: 'tinyint', default: 1 })
     @AutoMap()
         is_active: 0 | 1;

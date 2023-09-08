@@ -15,12 +15,12 @@ export class OtpDTO {
 
 export class CreateOtpDTO {
     receive_address: string;
-    type: ValueOf<typeof CONSTANTS.LOGIN_TYPES>;
+    type: ValueOf<typeof CONSTANTS.REGISTER_TYPES>;
 }
 
-export class LoginOtpDTP {
+export class RegisterOtpDTO {
     id: number;
     otp: string;
     email_phone: string;
-    type: ValueOf<typeof CONSTANTS.LOGIN_TYPES>;
+    type: ValueOf<typeof CONSTANTS.REGISTER_TYPES>;
 }

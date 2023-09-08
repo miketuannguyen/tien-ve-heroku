@@ -1,16 +1,16 @@
 import { Body, Controller, HttpStatus, Post, Req, Res, UsePipes } from '@nestjs/common';
 import * as dayjs from 'dayjs';
 import { Response } from 'express';
-import { LoginOtpDTP as LoginOtpDTO, SaveAccountDTO, UserDTO } from 'src/dtos';
+import { RegisterOtpDTO, SaveAccountDTO, UserDTO } from 'src/dtos';
 import BaseController from 'src/includes/base.controller';
 import { ValidationPipe } from 'src/pipes';
 import { APIResponse, CONSTANTS, MESSAGES } from 'src/utils';
+import { AuthenticatedRequest } from 'src/utils/types';
 import { OtpService } from '../otp/otp.service';
 import ROUTES from '../routes';
+import { UserService } from '../user/user.service';
 import * as AuthSchemas from './auth.schemas';
 import { AuthService } from './auth.service';
-import { UserService } from '../user/user.service';
-import { AuthenticatedRequest } from 'src/utils/types';
 
 @Controller(ROUTES.AUTH.MODULE)
 export class AuthController extends BaseController {
@@ -19,9 +19,67 @@ export class AuthController extends BaseController {
         super();
     }
 
-    @Post(ROUTES.AUTH.LOGIN_OTP)
-    @UsePipes(new ValidationPipe(AuthSchemas.loginOtpSchema))
-    public async loginOtp(@Body() body: LoginOtpDTO, @Res() res: Response<APIResponse<(UserDTO & { access_token: string }) | undefined>>) {
+    /**
+     * Login
+     * @param body - `username` and `password` are required
+     * @param res - user DTO with access token
+     */
+    @Post(ROUTES.AUTH.LOGIN)
+    @UsePipes(new ValidationPipe(AuthSchemas.loginSchema))
+    public async login(
+        @Body() body: { email_phone: string; password: string },
+        @Res() res: Response<APIResponse<(UserDTO & { access_token: string }) | undefined>>,
+    ) {
+        try {
+            const { email_phone: emailPhone, password } = body;
+            const loginRes = await this._authService.login(emailPhone, password);
+            if (!loginRes) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_LOGIN);
+                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+            }
+            if (!loginRes.is_active) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_USER_DEACTIVATED);
+                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+            }
+
+            const successRes = APIResponse.success(MESSAGES.SUCCESS.SUCCESS, loginRes);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.login.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Post(ROUTES.AUTH.CHANGE_PASSWORD)
+    public async changePassword(
+        @Body() body: { old_password: string; new_password: string },
+        @Req() req: AuthenticatedRequest,
+        @Res() res: Response<APIResponse<void>>,
+    ) {
+        try {
+            const oldPassword = body.old_password;
+            const newPassword = body.new_password;
+            const id = req.userPayload.id;
+
+            const isSuccess = await this._authService.changePassword(id, oldPassword, newPassword);
+            if (!isSuccess) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_PASSWORD_NOT_CORRECT);
+                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+            }
+
+            const successRes = APIResponse.success<void>(MESSAGES.SUCCESS.SUCCESS);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.changePassword.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Post(ROUTES.AUTH.REGISTER)
+    @UsePipes(new ValidationPipe(AuthSchemas.registerOtpSchema))
+    public async register(@Body() body: RegisterOtpDTO, @Res() res: Response<APIResponse<(UserDTO & { access_token: string }) | undefined>>) {
         try {
             const otp = await this._otpService.getById(body.id);
             if (!otp) {
@@ -49,20 +107,23 @@ export class AuthController extends BaseController {
             await this._otpService.setUsed(body.id);
 
             const existence = await this._userService.getByEmailPhone(body.email_phone);
-            if (!existence) {
-                const data = new UserDTO();
-                if (body.type === CONSTANTS.LOGIN_TYPES.EMAIL) data.email = body.email_phone;
-                if (body.type === CONSTANTS.LOGIN_TYPES.PHONE) data.phone = body.email_phone;
-                const createdUser = await this._userService.save(data);
-                if (!createdUser) {
-                    const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
-                    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
-                }
+            if (existence) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_EMAIL_PHONE_EXISTS);
+                return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
             }
 
-            const loginRes = await this._authService.login(body.email_phone, body.type);
+            const data = new UserDTO();
+            if (body.type === CONSTANTS.REGISTER_TYPES.EMAIL) data.email = body.email_phone;
+            if (body.type === CONSTANTS.REGISTER_TYPES.PHONE) data.phone = body.email_phone;
+            const createdUser = await this._userService.save(data);
+            if (!createdUser) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+                return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+            }
+
+            const loginRes = await this._authService.loginNoPassword(body.email_phone, body.type);
             if (!loginRes) {
-                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_LOGIN);
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
                 return res.status(HttpStatus.BAD_REQUEST).json(errRes);
             }
 
@@ -74,7 +135,7 @@ export class AuthController extends BaseController {
             const successRes = APIResponse.success(MESSAGES.SUCCESS.SUCCESS, loginRes);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
-            this._logger.error(this.loginOtp.name, e);
+            this._logger.error(this.register.name, e);
             const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
@@ -89,6 +150,7 @@ export class AuthController extends BaseController {
             data.email = body.email;
             data.phone = body.phone;
             data.name = body.name;
+            data.password = body.password;
 
             const emailUser = await this._userService.getByEmail(data.email);
             if (emailUser && emailUser.id !== req.userPayload.id) {

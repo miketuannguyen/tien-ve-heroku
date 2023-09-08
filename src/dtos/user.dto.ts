@@ -7,6 +7,7 @@ export class UserDTO {
     @AutoMap() email: string;
     @AutoMap() phone: string;
     @AutoMap() name: string;
+    @AutoMap() password: string;
     @AutoMap() is_active: 0 | 1;
     @AutoMap() created_date: string;
     @AutoMap() updated_date: string;
@@ -38,4 +39,5 @@ export class SaveAccountDTO {
     email: string;
     phone: string;
     name: string;
+    password: string;
 }

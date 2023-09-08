@@ -31,6 +31,9 @@ const MESSAGES = {
         ERR_PHONE_EXISTS: 'err_phone_exists',
         ERR_NOT_BANK_SMS: 'err_not_bank_sms',
         ERR_SMS_AMOUNT_NOT_POSITIVE: 'err_sms_amount_not_positive',
+        ERR_SEND_DEBT_ANNOUNCEMENT: 'err_send_debt_announcement',
+        ERR_EMAIL_PHONE_EXISTS: 'err_email_phone_exists',
+        ERR_PASSWORD_NOT_CORRECT: 'err_password_not_correct',
     },
 } as const;
 

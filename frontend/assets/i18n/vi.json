@@ -3,6 +3,7 @@
     "label": {
         "username": "Tài khoản",
         "password": "Mật khẩu",
+        "confirm_password": "Xác nhận mật khẩu",
         "submit": "Submit",
         "close": "Đóng",
         "page_not_found": "Không tìm thấy trang",
@@ -54,7 +55,9 @@
         "completed": "Đã hoàn thành",
         "not_completed": "Chưa hoàn thành",
         "general_info": "Thông tin chung",
-        "created_date": "Ngày tạo"
+        "created_date": "Ngày tạo",
+        "email_phone": "Email hoặc SĐT",
+        "register": "Đăng ký"
     },
     "validation": {
         "required": "Vui lòng nhập {{item}}",
@@ -92,6 +95,8 @@
         "err_check_otp": "Lỗi kiểm tra mã xác nhận.",
         "err_email_exists": "Email đã tồn tại.",
         "err_phone_exists": "Số điện thoại đã tồn tại.",
-        "valid_otp": "Mã xác nhận hợp lệ."
+        "valid_otp": "Mã xác nhận hợp lệ.",
+        "err_send_debt_announcement": "Công nợ đã được nhập. Lỗi gửi tin nhắn nhắc nợ.",
+        "err_password_not_correct": "Mật khẩu không đúng."
     }
 }

@@ -24,7 +24,7 @@ const CONSTANTS = {
         LENGTH: 6,
         EXPIRED_SECONDS: 300,
     },
-    LOGIN_TYPES: {
+    REGISTER_TYPES: {
         EMAIL: 1,
         PHONE: 2,
     },

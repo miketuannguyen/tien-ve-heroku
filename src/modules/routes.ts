@@ -3,8 +3,10 @@ import { Helpers } from 'src/utils';
 const ROUTES = {
     AUTH: {
         MODULE: 'auth',
-        LOGIN_OTP: 'login-otp',
+        REGISTER: 'register',
+        LOGIN: 'login',
         SAVE_ACCOUNT: 'save-account',
+        CHANGE_PASSWORD: 'change-password',
     },
     MESSAGE: {
         MODULE: 'message',
@@ -15,6 +17,7 @@ const ROUTES = {
     USER: {
         MODULE: 'user',
         PROFILE: 'profile',
+        GET_BY_EMAIL_PHONE: 'by-email-phone/:email_phone',
     },
     OTP: {
         MODULE: 'otp',

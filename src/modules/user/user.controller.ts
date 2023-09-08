@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Req, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { UserDTO } from 'src/dtos';
 import { BaseController } from 'src/includes';
@@ -32,6 +32,19 @@ export class UserController extends BaseController {
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
             this._logger.error(this.getProfile.name, e);
+            const errRes = APIResponse.error<undefined>(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Get(ROUTES.USER.GET_BY_EMAIL_PHONE)
+    public async getByEmailPhone(@Param('email_phone') emailPhone: string, @Res() res: Response<APIResponse<UserDTO | undefined>>) {
+        try {
+            const result = await this._userService.getByEmailPhone(emailPhone);
+            const successRes = APIResponse.success(MESSAGES.SUCCESS.SUCCESS, result ?? undefined);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.getByEmailPhone.name, e);
             const errRes = APIResponse.error<undefined>(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }

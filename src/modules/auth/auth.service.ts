@@ -16,12 +16,53 @@ export class AuthService extends BaseService {
         super();
     }
 
-    public async login(emailPhone: string, type: ValueOf<typeof CONSTANTS.LOGIN_TYPES>): Promise<LoginUserDTO | null> {
+    /**
+     * Login user
+     * @param emailPhone - `m_users.emailPhone`
+     * @param password - `m_users.password`
+     * @returns user entity
+     */
+    public async login(emailPhone: string, password: string): Promise<(UserDTO & { access_token: string }) | null> {
+        const secret = process.env.ACCESS_TOKEN_SECRET;
+        if (!Helpers.isString(secret)) return null;
+
+        const user = await this._userRepo
+            .createQueryBuilder('user')
+            .where('user.email = :email', { email: emailPhone })
+            .orWhere('user.phone = :phone', { phone: emailPhone })
+            .getOne();
+        if (Helpers.isEmptyObject(user)) return null;
+        if (user?.password !== password) return null;
+
+        const userDTO = mapper.map(user, UserEntity, UserDTO);
+
+        // jwt need userDTO to be plain object
+        const expiredTime = Number(this._configService.get('ACCESS_TOKEN_EXPIRED_TIME')) || 0;
+        const accessToken = jwt.sign({ ...userDTO }, secret, { expiresIn: expiredTime });
+
+        return { ...userDTO, access_token: accessToken };
+    }
+
+    public async changePassword(id: number, oldPassword: string, newPassword: string) {
+        if (!id || !Helpers.isString(oldPassword) || !Helpers.isString(newPassword)) return false;
+
+        const user = await this._userRepo.findOneBy({ id });
+        if (!user || Helpers.isEmptyObject(user)) return false;
+
+        if (user.password !== oldPassword) return false;
+
+        user.password = newPassword;
+        await this._userRepo.save(user);
+
+        return true;
+    }
+
+    public async loginNoPassword(emailPhone: string, type: ValueOf<typeof CONSTANTS.REGISTER_TYPES>): Promise<LoginUserDTO | null> {
         const secret = process.env.ACCESS_TOKEN_SECRET;
         if (!Helpers.isString(secret)) return null;
 
         const userEntity =
-            type === CONSTANTS.LOGIN_TYPES.EMAIL
+            type === CONSTANTS.REGISTER_TYPES.EMAIL
                 ? await this._userRepo.findOneBy({ email: emailPhone })
                 : await this._userRepo.findOneBy({ phone: emailPhone });
         if (Helpers.isEmptyObject(userEntity)) return null;

@@ -54,6 +54,7 @@ export const saveAccountSchema = Joi.object<{
     email: string;
     phone: string;
     name: string;
+    password: string;
 }>({
     email: Joi.string().required().messages({
         'any.required': 'required',
@@ -66,6 +67,49 @@ export const saveAccountSchema = Joi.object<{
         'string.empty': 'required',
     }),
     name: Joi.string().required().messages({
+        'any.required': 'required',
+        'string.base': 'required',
+        'string.empty': 'required',
+    }),
+    password: Joi.string().required().messages({
+        'any.required': 'required',
+        'string.base': 'required',
+        'string.empty': 'required',
+    }),
+})
+    .options({
+        abortEarly: false,
+    })
+    .unknown(true);
+
+export const validateForgotPasswordOtpSchema = Joi.object<{
+    id: number;
+    otp: string;
+    email_phone: string;
+}>({
+    id: Joi.required().messages({
+        'any.required': 'required',
+    }),
+    otp: Joi.string().required().messages({
+        'any.required': 'required',
+        'string.base': 'required',
+        'string.empty': 'required',
+    }),
+    email_phone: Joi.string().required().messages({
+        'any.required': 'required',
+        'string.base': 'required',
+        'string.empty': 'required',
+    }),
+})
+    .options({
+        abortEarly: false,
+    })
+    .unknown(true);
+
+export const renewPasswordSchema = Joi.object<{
+    password: string;
+}>({
+    password: Joi.string().required().messages({
         'any.required': 'required',
         'string.base': 'required',
         'string.empty': 'required',

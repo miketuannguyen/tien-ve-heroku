@@ -57,7 +57,11 @@ export class AuthService extends BaseService {
         return true;
     }
 
-    public async loginNoPassword(emailPhone: string, type: ValueOf<typeof CONSTANTS.REGISTER_TYPES>): Promise<LoginUserDTO | null> {
+    public async loginNoPassword(
+        emailPhone: string,
+        type: ValueOf<typeof CONSTANTS.REGISTER_TYPES>,
+        isLongToken: boolean,
+    ): Promise<LoginUserDTO | null> {
         const secret = process.env.ACCESS_TOKEN_SECRET;
         if (!Helpers.isString(secret)) return null;
 
@@ -70,7 +74,8 @@ export class AuthService extends BaseService {
         const userDTO = mapper.map(userEntity, UserEntity, UserDTO);
 
         // jwt need userDTO to be plain object
-        const expiredTime = Number(this._configService.get('ACCESS_TOKEN_EXPIRED_TIME')) || 0;
+        const configKey = isLongToken ? 'LONG_ACCESS_TOKEN_EXPIRED_TIME' : 'ACCESS_TOKEN_EXPIRED_TIME';
+        const expiredTime = Number(this._configService.get(configKey)) || 0;
         const accessToken = jwt.sign({ ...userDTO }, secret, { expiresIn: expiredTime });
 
         const loginUserDTO = new LoginUserDTO();
@@ -92,5 +97,37 @@ export class AuthService extends BaseService {
         if (Helpers.isEmptyObject(user)) return null;
 
         return mapper.map(user, UserEntity, UserDTO);
+    }
+
+    public async createForgotPasswordAccessToken(emailPhone: string) {
+        const secret = process.env.ACCESS_TOKEN_SECRET;
+        if (!Helpers.isString(secret)) return '';
+
+        const user = await this._userRepo
+            .createQueryBuilder('user')
+            .where('user.email = :email', { email: emailPhone })
+            .orWhere('user.phone = :phone', { phone: emailPhone })
+            .getOne();
+        if (Helpers.isEmptyObject(user)) return '';
+
+        const userDTO = mapper.map(user, UserEntity, UserDTO);
+
+        // jwt need userDTO to be plain object
+        const expiredTime = Number(this._configService.get('FORGOT_PASSWORD_ACCESS_TOKEN_EXPIRED_TIME')) || 0;
+        const accessToken = jwt.sign({ ...userDTO }, secret, { expiresIn: expiredTime });
+
+        return accessToken;
+    }
+
+    public async renewPassword(id: number, newPassword: string) {
+        if (!id || !Helpers.isString(newPassword)) return false;
+
+        const user = await this._userRepo.findOneBy({ id });
+        if (!user || Helpers.isEmptyObject(user)) return false;
+
+        user.password = newPassword;
+        await this._userRepo.save(user);
+
+        return true;
     }
 }

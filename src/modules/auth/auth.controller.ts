@@ -1,10 +1,10 @@
 import { Body, Controller, HttpStatus, Post, Req, Res, UsePipes } from '@nestjs/common';
 import * as dayjs from 'dayjs';
 import { Response } from 'express';
-import { RegisterOtpDTO, SaveAccountDTO, UserDTO } from 'src/dtos';
+import { RegisterOtpDTO, RenewPasswordDTO, SaveAccountDTO, UserDTO, ValidateForgotPasswordOtpDTO } from 'src/dtos';
 import BaseController from 'src/includes/base.controller';
 import { ValidationPipe } from 'src/pipes';
-import { APIResponse, CONSTANTS, MESSAGES } from 'src/utils';
+import { APIResponse, CONSTANTS, Helpers, MESSAGES } from 'src/utils';
 import { AuthenticatedRequest } from 'src/utils/types';
 import { OtpService } from '../otp/otp.service';
 import ROUTES from '../routes';
@@ -121,7 +121,7 @@ export class AuthController extends BaseController {
                 return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
             }
 
-            const loginRes = await this._authService.loginNoPassword(body.email_phone, body.type);
+            const loginRes = await this._authService.loginNoPassword(body.email_phone, body.type, body.is_long_token);
             if (!loginRes) {
                 const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
                 return res.status(HttpStatus.BAD_REQUEST).json(errRes);
@@ -174,6 +174,77 @@ export class AuthController extends BaseController {
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
             this._logger.error(this.saveAccount.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Post(ROUTES.AUTH.VALIDATE_FORGOT_PASSWORD_OTP)
+    @UsePipes(new ValidationPipe(AuthSchemas.validateForgotPasswordOtpSchema))
+    public async validateForgotPasswordOtp(
+        @Body() body: ValidateForgotPasswordOtpDTO,
+        @Res() res: Response<APIResponse<{ access_token: string } | undefined>>,
+    ) {
+        try {
+            const otp = await this._otpService.getById(body.id);
+            if (!otp) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+                return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+            }
+
+            if (otp.otp !== body.otp) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_OTP_NOT_VALID);
+                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+            }
+
+            const current = dayjs();
+            const expireDate = dayjs(otp.expired_date);
+            if (current.isAfter(expireDate)) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_OTP_EXPIRED);
+                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+            }
+
+            if (otp.is_used) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_OTP_USED);
+                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+            }
+
+            await this._otpService.setUsed(body.id);
+
+            const accessToken = await this._authService.createForgotPasswordAccessToken(body.email_phone);
+            if (!Helpers.isString(accessToken)) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+                return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+            }
+
+            const successRes = APIResponse.success(MESSAGES.SUCCESS.SUCCESS, { access_token: accessToken });
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.validateForgotPasswordOtp.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Post(ROUTES.AUTH.RENEW_PASSWORD)
+    @UsePipes(new ValidationPipe(AuthSchemas.renewPasswordSchema))
+    public async renewPassword(
+        /** Temporary access token */
+        @Req() req: AuthenticatedRequest,
+        @Body() body: RenewPasswordDTO,
+        @Res() res: Response<APIResponse<void>>,
+    ) {
+        try {
+            const isSuccess = await this._authService.renewPassword(req.userPayload.id, body.password);
+            if (!isSuccess) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_PASSWORD_NOT_CORRECT);
+                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+            }
+
+            const successRes = APIResponse.success<void>(MESSAGES.SUCCESS.SUCCESS);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.renewPassword.name, e);
             const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }

@@ -22,7 +22,7 @@ const CONSTANTS = {
     },
     OTP: {
         LENGTH: 6,
-        EXPIRED_SECONDS: 300,
+        EXPIRED_SECONDS: 600,
     },
     REGISTER_TYPES: {
         EMAIL: 1,

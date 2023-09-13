@@ -187,3 +187,30 @@ img.square-image {
     width: 100px;
     height: 100px;
 }
+
+.tab-radio {
+    display: flex;
+    cursor: pointer;
+}
+
+.tab-radio>.tab-radio-input {
+    width: 0;
+    height: 0;
+    margin: 0;
+    display: none;
+}
+
+.tab-radio>.tab-radio-box {
+    padding: 0.1rem 0.5rem;
+    width: 100%;
+    text-align: center;
+    transition: 0.5s;
+    border-bottom: 2px solid rgba(0, 0, 0, 0);
+    font-weight: normal;
+    color: #00000025;
+}
+
+.tab-radio>.tab-radio-input:checked+.tab-radio-box {
+    border-color: $brightPrimaryColor;
+    color: $brightPrimaryColor;
+}

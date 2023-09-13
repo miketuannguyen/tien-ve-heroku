@@ -2,6 +2,7 @@ $primaryColor: #ad006c;
 $dangerColor: #ad000b;
 $tertiaryColor: #9880ff;
 $grayColor: #5a5c69;
+$brightPrimaryColor: #d82d8b;
 
 .btn-primary {
     background-color: $primaryColor !important;
@@ -26,6 +27,16 @@ $grayColor: #5a5c69;
     border-color: $primaryColor;
 }
 
+.form-check-input {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.form-check-input:checked {
+    background-color: $brightPrimaryColor;
+    border: $brightPrimaryColor;
+}
+
 .page-item.active .page-link {
     background-color: $primaryColor;
     color: white;
@@ -38,6 +49,10 @@ $grayColor: #5a5c69;
 
 .text-primary {
     color: $primaryColor !important;
+}
+
+.text-bright-primary {
+    color: $brightPrimaryColor !important;
 }
 
 ngb-pagination .pagination {
@@ -68,4 +83,29 @@ ngb-pagination .pagination {
 
 ng-select.border-danger div {
     border-color: $dangerColor !important;
+}
+
+.btn-gradient-primary {
+    background: linear-gradient(90deg, $brightPrimaryColor, #F69063) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 15px 20px rgba(216, 45, 139, 0.3);
+    transition: box-shadow 0.3s ease-in-out;
+
+    :hover {
+        background: linear-gradient(90deg, $brightPrimaryColor, #F69063) !important;
+        box-shadow: 0 15px 20px rgba(216, 45, 139, 0.5);
+    }
+}
+
+.carousel-item-next:not(.carousel-item-left),
+.active.carousel-item-right {
+    -webkit-transform: unset !important;
+    transform: unset !important;
+}
+
+.carousel-item-prev:not(.carousel-item-right),
+.active.carousel-item-left {
+    -webkit-transform: unset !important;
+    transform: unset !important;
 }

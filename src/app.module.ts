@@ -11,20 +11,20 @@ import { AuthMiddleware } from './middleware';
 import { MiddlewareModule } from './middleware/middleware.module';
 import { AuthController } from './modules/auth/auth.controller';
 import { AuthModule } from './modules/auth/auth.module';
+import { BankAccountController } from './modules/bank-account/bank-account.controller';
+import { BankAccountModule } from './modules/bank-account/bank-account.module';
+import { BankController } from './modules/bank/bank.controller';
+import { BankModule } from './modules/bank/bank.module';
+import { DebtController } from './modules/debt/debt.controller';
+import { DebtModule } from './modules/debt/debt.module';
 import { MessageModule } from './modules/message/message.module';
+import { MessagingModule } from './modules/messaging/messaging.module';
 import { OtpModule } from './modules/otp/otp.module';
 import ROUTES from './modules/routes';
 import { UserController } from './modules/user/user.controller';
 import { UserModule } from './modules/user/user.module';
 import { RepositoryModule } from './repository/repository.module';
 import { CONSTANTS } from './utils';
-import { MessagingModule } from './modules/messaging/messaging.module';
-import { BankModule } from './modules/bank/bank.module';
-import { BankAccountModule } from './modules/bank-account/bank-account.module';
-import { BankController } from './modules/bank/bank.controller';
-import { BankAccountController } from './modules/bank-account/bank-account.controller';
-import { DebtModule } from './modules/debt/debt.module';
-import { DebtController } from './modules/debt/debt.controller';
 
 @Module({
     imports: [
@@ -76,16 +76,17 @@ export class AppModule {
      * Configure middlewares
      */
     configure(consumer: MiddlewareConsumer) {
-        const authExcludeRouteList = [`/${ROUTES.AUTH.MODULE}/${ROUTES.AUTH.LOGIN}`, `/${ROUTES.AUTH.MODULE}/${ROUTES.AUTH.REGISTER}`];
-        const userExcludeRouteList = [`/${ROUTES.USER.MODULE}/${ROUTES.USER.GET_BY_EMAIL_PHONE}`];
+        const authExcludeRouteList = [ROUTES.AUTH.LOGIN, ROUTES.AUTH.REGISTER, ROUTES.AUTH.VALIDATE_FORGOT_PASSWORD_OTP];
+        const userExcludeRouteList = [ROUTES.USER.GET_BY_EMAIL_PHONE];
         consumer
             .apply(AuthMiddleware)
-            .exclude(...authExcludeRouteList)
+            .exclude(...authExcludeRouteList.map((route) => `/${ROUTES.AUTH.MODULE}/${route}`))
             .forRoutes(AuthController);
         consumer
             .apply(AuthMiddleware)
-            .exclude(...userExcludeRouteList)
+            .exclude(...userExcludeRouteList.map((route) => `/${ROUTES.USER.MODULE}/${route}`))
             .forRoutes(UserController);
+
         consumer.apply(AuthMiddleware).forRoutes(BankController, BankAccountController, DebtController);
     }
 }

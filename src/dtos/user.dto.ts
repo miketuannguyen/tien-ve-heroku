@@ -41,3 +41,13 @@ export class SaveAccountDTO {
     name: string;
     password: string;
 }
+
+export class RenewPasswordDTO {
+    password: string;
+}
+
+export class ValidateForgotPasswordOtpDTO {
+    id: number;
+    otp: string;
+    email_phone: string;
+}

@@ -23,4 +23,5 @@ export class RegisterOtpDTO {
     otp: string;
     email_phone: string;
     type: ValueOf<typeof CONSTANTS.REGISTER_TYPES>;
+    is_long_token: boolean;
 }

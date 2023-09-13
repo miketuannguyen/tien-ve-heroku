@@ -7,6 +7,8 @@ const ROUTES = {
         LOGIN: 'login',
         SAVE_ACCOUNT: 'save-account',
         CHANGE_PASSWORD: 'change-password',
+        VALIDATE_FORGOT_PASSWORD_OTP: 'validate-forgot-password-otp',
+        RENEW_PASSWORD: 'renew-password',
     },
     MESSAGE: {
         MODULE: 'message',

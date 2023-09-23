@@ -1,8 +1,7 @@
-$primaryColor: #ad006c;
+$primaryColor: #d82d8b;
 $dangerColor: #ad000b;
 $tertiaryColor: #9880ff;
 $grayColor: #5a5c69;
-$brightPrimaryColor: #d82d8b;
 
 .btn-primary {
     background-color: $primaryColor !important;
@@ -33,8 +32,8 @@ $brightPrimaryColor: #d82d8b;
 }
 
 .form-check-input:checked {
-    background-color: $brightPrimaryColor;
-    border: $brightPrimaryColor;
+    background-color: $primaryColor;
+    border: $primaryColor;
 }
 
 .page-item.active .page-link {
@@ -51,21 +50,13 @@ $brightPrimaryColor: #d82d8b;
     color: $primaryColor !important;
 }
 
-.text-bright-primary {
-    color: $brightPrimaryColor !important;
+a.text-primary:focus,
+a.text-primary:hover {
+    color: $primaryColor !important;
 }
 
 ngb-pagination .pagination {
     margin-bottom: 0;
-}
-
-.brand-image {
-    height: 130px;
-    width: auto;
-}
-
-.sidebar-collapse .brand-image {
-    height: 45px !important;
 }
 
 .custom-control-input:checked~.custom-control-label::before {
@@ -86,14 +77,14 @@ ng-select.border-danger div {
 }
 
 .btn-gradient-primary {
-    background: linear-gradient(90deg, $brightPrimaryColor, #F69063) !important;
+    background: linear-gradient(90deg, $primaryColor, #F69063) !important;
     color: white !important;
     border: none !important;
     box-shadow: 0 15px 20px rgba(216, 45, 139, 0.3);
     transition: box-shadow 0.3s ease-in-out;
 
     :hover {
-        background: linear-gradient(90deg, $brightPrimaryColor, #F69063) !important;
+        background: linear-gradient(90deg, $primaryColor, #F69063) !important;
         box-shadow: 0 15px 20px rgba(216, 45, 139, 0.5);
     }
 }
@@ -108,4 +99,8 @@ ng-select.border-danger div {
 .active.carousel-item-left {
     -webkit-transform: unset !important;
     transform: unset !important;
+}
+
+.sidebar-collapse .brand-name {
+    display: none !important;
 }

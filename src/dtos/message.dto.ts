@@ -10,6 +10,9 @@ export class MessageDTO {
     @AutoMap() receive_date: string;
     @AutoMap() debt_id?: string;
     @AutoMap() amount: number;
+    @AutoMap() balance: number;
+    @AutoMap() sign: -1 | 1;
+    @AutoMap() bank_account_id: number;
     @AutoMap() is_deleted: 0 | 1;
     @AutoMap() created_date: string;
     @AutoMap() updated_date: string;

@@ -133,15 +133,6 @@ p.app-error-message {
     }
 }
 
-.page-title {
-    margin-bottom: 15px;
-    margin-top: 5px;
-    font-size: 1.75rem;
-    font-weight: 400;
-    line-height: 1.2;
-    color: $grayColor;
-}
-
 .total-text {
     font-size: 1.1rem;
     display: flex;
@@ -217,4 +208,46 @@ img.square-image {
 .tab-radio>.tab-radio-input:checked+.tab-radio-box {
     border-color: $primaryColor;
     color: $primaryColor;
+}
+
+.bank-account-status {
+    border-radius: 12px;
+    display: flex;
+    text-wrap: nowrap;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+
+    .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        margin-right: 0.5rem;
+    }
+}
+
+.bank-account-status.deactivated {
+    background-color: #FEE2E2;
+    color: #7F1D1D;
+
+    .dot {
+        background-color: #EF4444;
+    }
+}
+
+.bank-account-status.not-activated {
+    background-color: #FEF9C3;
+    color: #713F12;
+
+    .dot {
+        background-color: #FACC15;
+    }
+}
+
+.bank-account-status.activated {
+    background-color: #DCFCE7;
+    color: #14532D;
+
+    .dot {
+        background-color: #22C55E;
+    }
 }

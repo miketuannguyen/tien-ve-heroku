@@ -37,3 +37,7 @@ export type CommonSearchQuery = {
     /** Page number, start with `1`, set `0` to get all */
     page?: number;
 };
+
+export type IdListObject<T extends string | number> = {
+    id_list: T[];
+};

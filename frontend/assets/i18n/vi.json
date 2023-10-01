@@ -60,7 +60,16 @@
         "register": "Đăng ký",
         "email_address": "Địa chỉ Email",
         "send_code": "Gửi mã",
-        "complete": "Hoàn tất"
+        "complete": "Hoàn tất",
+        "filter": "Lọc",
+        "status": "Trạng thái",
+        "apply": "Áp dụng",
+        "all": "Tất cả",
+        "view_detail": "Xem chi tiết",
+        "delete": "Xóa",
+        "edit": "Chỉnh sửa",
+        "cancel": "Hủy",
+        "confirm_entered_info": "Xác nhận thông tin đã nhập"
     },
     "validation": {
         "required": "Vui lòng nhập {{item}}",

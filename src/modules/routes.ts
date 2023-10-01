@@ -35,6 +35,7 @@ const ROUTES = {
         DETAIL: ':id',
         CREATE: '',
         UPDATE: ':id',
+        DELETE_MULTIPLE: '',
         DELETE: ':id',
     },
     DEBT: {

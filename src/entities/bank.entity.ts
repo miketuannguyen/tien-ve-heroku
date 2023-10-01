@@ -16,6 +16,10 @@ export class BankEntity extends BaseEntity {
     @AutoMap()
         name: string;
 
+    @Column({ type: 'varchar', length: 100 })
+    @AutoMap()
+        account_number_start: string;
+
     @Column({ type: 'tinyint', default: 1 })
     @AutoMap()
         is_deleted: 0 | 1;

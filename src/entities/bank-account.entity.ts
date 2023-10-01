@@ -1,6 +1,8 @@
 import { AutoMap } from '@automapper/classes';
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
+import { CONSTANTS } from 'src/utils';
+import { ValueOf } from 'src/utils/types';
 
 @Entity('d_bank_accounts')
 export class BankAccountEntity extends BaseEntity {
@@ -35,6 +37,14 @@ export class BankAccountEntity extends BaseEntity {
     @Column({ type: 'varchar', length: 255, nullable: true })
     @AutoMap()
         name: string;
+
+    @Column({ type: 'tinyint', default: CONSTANTS.BANK_ACCOUNT_STATUSES.NOT_ACTIVATED })
+    @AutoMap()
+        status: ValueOf<typeof CONSTANTS.BANK_ACCOUNT_STATUSES>;
+
+    @Column({ type: 'bigint' })
+    @AutoMap()
+        last_message_id: number;
 
     @Column({ type: 'tinyint', default: 1 })
     @AutoMap()

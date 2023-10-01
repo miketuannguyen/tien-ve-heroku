@@ -148,13 +148,12 @@ export default class Helpers {
 
     public static getSubstringBetweenStartEnd(inputString: string, start: string, end: string): string | null {
         const startIdx = inputString.indexOf(start);
-        const endIdx = inputString.indexOf(end);
+        if (startIdx === -1) return null;
 
-        if (startIdx !== -1 && endIdx !== -1 && startIdx < endIdx) {
-            return inputString.substring(startIdx + 1, endIdx);
-        }
+        const endIdx = inputString.substring(startIdx + start.length).indexOf(end);
+        if (endIdx === -1) return null;
 
-        return null;
+        return inputString.substring(startIdx + start.length, startIdx + start.length + endIdx);
     }
 
     public static getSubstringFromStart(inputString: string, start: string, length: number): string | null {
@@ -165,5 +164,16 @@ export default class Helpers {
         }
 
         return null;
+    }
+
+    /**
+     * Check if value is one of object values using strict and narrow comparison
+     * @param val - the value
+     * @param obj - the object
+     * @returns - value is one of object values or not
+     */
+    public static isObjectValue(val: any, obj: { [key: string]: any }) {
+        const values = Object.values(obj);
+        return values.includes(val);
     }
 }

@@ -1,11 +1,30 @@
 $primaryColor: #d82d8b;
 $dangerColor: #ad000b;
 $tertiaryColor: #9880ff;
-$grayColor: #5a5c69;
+$grayColor: #EAECF0;
+$darkGrayColor: #dee2e6;
 
 .btn-primary {
     background-color: $primaryColor !important;
     border-color: $primaryColor !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: $primaryColor !important;
+    border-color: $primaryColor !important;
+}
+
+.btn-outline-primary {
+    color: $primaryColor !important;
+    border-color: $primaryColor !important;
+
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: $primaryColor !important;
+    color: white !important;
 }
 
 .bg-primary {
@@ -38,6 +57,7 @@ $grayColor: #5a5c69;
 
 .page-item.active .page-link {
     background-color: $primaryColor;
+    border-color: $primaryColor;
     color: white;
 }
 
@@ -103,4 +123,86 @@ ng-select.border-danger div {
 
 .sidebar-collapse .brand-name {
     display: none !important;
+}
+
+.content-header h1 {
+    font-size: 2.2rem;
+}
+
+.btn.btn-common {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    border-radius: 37px;
+}
+
+.btn.btn-shadow.btn-white {
+    box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+.btn.btn-shadow.btn-primary {
+    box-shadow: 0px 0px 15px 2px rgba(216, 45, 139, 0.3) !important;
+}
+
+.btn.btn-create-new {
+    box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.2) !important;
+    background-color: white;
+    font-weight: 600;
+    padding: 0.6rem;
+    border-radius: 8px;
+
+    .icon {
+        color: $primaryColor;
+        background-color: white;
+        margin-right: 0.5rem;
+        box-shadow: 0px 0px 15px 2px rgba(216, 45, 139, 0.3) !important;
+    }
+}
+
+.card-border-gray {
+    border-color: $grayColor !important;
+}
+
+.btn-border-dark-gray {
+    border: 1px solid $darkGrayColor !important;
+}
+
+table.table-header-border-none thead tr th {
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+table.table-header-font-weight-normal thead tr th {
+    font-weight: normal;
+}
+
+table input.cell-checkbox {
+    height: 1rem;
+    width: auto;
+    cursor: pointer;
+}
+
+.icheck-primary>input:first-child:checked+input[type=hidden]+label::before,
+.icheck-primary>input:first-child:checked+label::before {
+    background-color: $primaryColor !important;
+    border-color: $primaryColor !important;
+}
+
+.modal-header,
+.modal-footer {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.modal-content {
+    border-radius: 38px !important;
+}
+
+.dropdown-toggle.dropdown-toggle-no-arrow::after {
+    display: none;
+}
+
+.dropdown-menu {
+    border-radius: 17px;
 }

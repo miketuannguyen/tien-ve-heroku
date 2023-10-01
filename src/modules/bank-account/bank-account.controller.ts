@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Req, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { BankAccountDTO, SaveBankAccountDTO } from 'src/dtos';
+import { BankAccountDTO, BankAccountDetailDTO, BankAccountListDTO, BankAccountSearchQuery, SaveBankAccountDTO } from 'src/dtos';
 import { BaseController } from 'src/includes';
-import { APIListResponse, APIResponse, Helpers, MESSAGES } from 'src/utils';
-import { AuthenticatedRequest, CommonSearchQuery } from 'src/utils/types';
+import { APIListResponse, APIResponse, CONSTANTS, Helpers, MESSAGES } from 'src/utils';
+import { AuthenticatedRequest, IdListObject } from 'src/utils/types';
 import ROUTES from '../routes';
 import { BankAccountService } from './bank-account.service';
 
@@ -15,10 +15,14 @@ export class BankAccountController extends BaseController {
     }
 
     @Get(ROUTES.BANK_ACCOUNT.LIST)
-    public async getList(@Req() req: AuthenticatedRequest, @Res() res: Response<APIListResponse<BankAccountDTO>>, @Query() query: CommonSearchQuery) {
+    public async getList(
+        @Req() req: AuthenticatedRequest,
+        @Res() res: Response<APIListResponse<BankAccountListDTO>>,
+        @Query() query: BankAccountSearchQuery,
+    ) {
         try {
-            const total = await this._bankAccountService.getTotal(req.userPayload.id);
-            let list: BankAccountDTO[] = [];
+            const total = await this._bankAccountService.getTotal(query, req.userPayload.id);
+            let list: BankAccountListDTO[] = [];
             if (total > 0) {
                 list = await this._bankAccountService.getList(query, req.userPayload.id);
                 if (!Helpers.isFilledArray(list)) {
@@ -27,7 +31,7 @@ export class BankAccountController extends BaseController {
                 }
             }
 
-            const successRes = APIListResponse.success<BankAccountDTO>(MESSAGES.SUCCESS.SUCCESS, list, total);
+            const successRes = APIListResponse.success(MESSAGES.SUCCESS.SUCCESS, list, total);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
             this._logger.error(this.getList.name, e);
@@ -37,7 +41,7 @@ export class BankAccountController extends BaseController {
     }
 
     @Get(ROUTES.BANK_ACCOUNT.DETAIL)
-    public async getDetail(@Param('id') id: number, @Req() req: AuthenticatedRequest, @Res() res: Response<APIResponse<BankAccountDTO | undefined>>) {
+    public async getDetail(@Param('id') id: number, @Res() res: Response<APIResponse<BankAccountDetailDTO | undefined>>) {
         try {
             const item = await this._bankAccountService.getDetail(id);
             if (!item) {
@@ -45,7 +49,7 @@ export class BankAccountController extends BaseController {
                 return res.status(HttpStatus.BAD_REQUEST).json(errRes);
             }
 
-            const successRes = APIResponse.success<BankAccountDTO>(MESSAGES.SUCCESS.SUCCESS, item);
+            const successRes = APIResponse.success(MESSAGES.SUCCESS.SUCCESS, item);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
             this._logger.error(this.getDetail.name, e);
@@ -68,6 +72,7 @@ export class BankAccountController extends BaseController {
             bankAccount.branch_name = body.branch_name;
             bankAccount.card_owner = body.card_owner;
             bankAccount.account_number = body.account_number;
+            bankAccount.status = CONSTANTS.BANK_ACCOUNT_STATUSES.NOT_ACTIVATED;
             bankAccount.name = body.name ?? '';
 
             const result = await this._bankAccountService.create(bankAccount);
@@ -111,6 +116,7 @@ export class BankAccountController extends BaseController {
             bankAccount.branch_name = body.branch_name;
             bankAccount.card_owner = body.card_owner;
             bankAccount.account_number = body.account_number;
+            bankAccount.status = body.status ?? CONSTANTS.BANK_ACCOUNT_STATUSES.NOT_ACTIVATED;
             bankAccount.name = body.name ?? '';
 
             const result = await this._bankAccountService.update(bankAccount);
@@ -124,6 +130,25 @@ export class BankAccountController extends BaseController {
         } catch (e) {
             this._logger.error(this.update.name, e);
             const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Delete(ROUTES.BANK_ACCOUNT.DELETE_MULTIPLE)
+    public async deleteMultiple(@Query() query: IdListObject<number>, @Res() res: Response<APIResponse<BankAccountDTO[]>>) {
+        try {
+            const idList = query.id_list;
+            const result = await this._bankAccountService.deleteMultiple(idList);
+            if (!Helpers.isFilledArray(result)) {
+                const errRes = APIResponse.error<BankAccountDTO[]>(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR, []);
+                return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+            }
+
+            const successRes = APIResponse.success<BankAccountDTO[]>(MESSAGES.SUCCESS.SUCCESS, result);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.delete.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR, []);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
     }

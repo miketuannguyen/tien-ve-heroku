@@ -42,6 +42,14 @@ const CONSTANTS = {
     ESMS_URL: {
         OTP_SMS: 'http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_post_json/',
     },
+    BANK_ACCOUNT_STATUSES: {
+        /** Ngừng kích hoạt */
+        DEACTIVATED: -1,
+        /** Chưa kích hoạt */
+        NOT_ACTIVATED: 0,
+        /** Đã kích hoạt */
+        ACTIVATED: 1,
+    },
 } as const;
 Helpers.deepFreeze(CONSTANTS);
 

@@ -36,6 +36,18 @@ export class MessageEntity extends BaseEntity {
     @AutoMap()
         amount: number;
 
+    @Column({ type: 'decimal', precision: 15, scale: 3 })
+    @AutoMap()
+        balance: number;
+
+    @Column({ type: 'tinyint' })
+    @AutoMap()
+        sign: -1 | 1;
+
+    @Column({ type: 'bigint' })
+    @AutoMap()
+        bank_account_id: number;
+
     @Column({ type: 'tinyint', default: 0 })
     @AutoMap()
         is_deleted: 0 | 1;

@@ -3,14 +3,15 @@ import { Response } from 'express';
 import { UserDTO } from 'src/dtos';
 import { BaseController } from 'src/includes';
 import { APIResponse, MESSAGES } from 'src/utils';
-import { AuthenticatedRequest } from 'src/utils/types';
+import { AuthenticatedRequest, CountObject } from 'src/utils/types';
+import { DebtService } from '../debt/debt.service';
 import ROUTES from '../routes';
 import { UserService } from './user.service';
 
 @Controller(ROUTES.USER.MODULE)
 export class UserController extends BaseController {
     /** Constructor */
-    constructor(private readonly _userService: UserService) {
+    constructor(private readonly _userService: UserService, private readonly _debtService: DebtService) {
         super();
     }
 
@@ -46,6 +47,20 @@ export class UserController extends BaseController {
         } catch (e) {
             this._logger.error(this.getByEmailPhone.name, e);
             const errRes = APIResponse.error<undefined>(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Get(ROUTES.USER.GET_TODAY_DEBT_COUNT)
+    public async getTodayDebtCount(@Req() req: AuthenticatedRequest, @Res() res: Response<APIResponse<CountObject>>) {
+        try {
+            const userId = req.userPayload.id;
+            const result = await this._debtService.getDebtCountOfUser(userId);
+            const successRes = APIResponse.success(MESSAGES.SUCCESS.SUCCESS, { count: result });
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.getTodayDebtCount.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR, { count: 0 });
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
     }

@@ -251,3 +251,24 @@ img.square-image {
         background-color: #22C55E;
     }
 }
+
+ul.nav.nav-tabs.nav-tabs-underline {
+    border: none;
+
+    .nav-item {
+        .nav-link {
+            padding-left: 3rem;
+            padding-right: 3rem;
+            text-align: center;
+            color: #00000025;
+            font-weight: 600;
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        .nav-link.active {
+            border-bottom: 2px solid $primaryColor;
+            color: $primaryColor;
+        }
+    }
+}

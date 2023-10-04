@@ -69,7 +69,10 @@
         "delete": "Xóa",
         "edit": "Chỉnh sửa",
         "cancel": "Hủy",
-        "confirm_entered_info": "Xác nhận thông tin đã nhập"
+        "confirm_entered_info": "Xác nhận thông tin đã nhập",
+        "input_file": "Nhập file",
+        "download": "Tải xuống",
+        "input_excel_file": "Nhập file Excel"
     },
     "validation": {
         "required": "Vui lòng nhập {{item}}",

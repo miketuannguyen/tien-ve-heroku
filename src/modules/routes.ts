@@ -20,6 +20,7 @@ const ROUTES = {
         MODULE: 'user',
         PROFILE: 'profile',
         GET_BY_EMAIL_PHONE: 'by-email-phone/:email_phone',
+        GET_TODAY_DEBT_COUNT: 'today-debt-count',
     },
     OTP: {
         MODULE: 'otp',

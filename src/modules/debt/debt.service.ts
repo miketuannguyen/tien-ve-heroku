@@ -13,15 +13,27 @@ export class DebtService extends BaseService {
         super();
     }
 
+    public async getDebtCountOfUser(userId: number) {
+        const { PREFIX, SEPARATOR, DATE_FORMAT, USER_ID_LENGTH } = CONSTANTS.DEBT_ID_FORMAT;
+
+        const curDateStr = dayjs(new Date()).format(DATE_FORMAT);
+        const paddedUserId = userId.toString().padStart(USER_ID_LENGTH, '0');
+        const idSearchStr = `${PREFIX}${SEPARATOR}${curDateStr}${SEPARATOR}${paddedUserId}${SEPARATOR}`; // TV-DDMMYY-0000X-
+
+        const debtCountQuery = this._debtRepo.createQueryBuilder('debt').where('debt.id LIKE :search_str', { search_str: `${idSearchStr}%` });
+        return await debtCountQuery.getCount();
+    }
+
     public async createMultiple(itemList: SaveDebtDTO[], userId: number) {
         if (!Helpers.isFilledArray(itemList) || !userId) return [];
 
         const { PREFIX, SEPARATOR, DATE_FORMAT, USER_ID_LENGTH, AUTO_INCREMENT_LENGTH } = CONSTANTS.DEBT_ID_FORMAT;
+
         const curDateStr = dayjs(new Date()).format(DATE_FORMAT);
         const paddedUserId = userId.toString().padStart(USER_ID_LENGTH, '0');
         const idSearchStr = `${PREFIX}${SEPARATOR}${curDateStr}${SEPARATOR}${paddedUserId}${SEPARATOR}`; // TV-DDMMYY-0000X-
-        const debtCountQuery = this._debtRepo.createQueryBuilder('debt').where('debt.id LIKE :search_str', { search_str: `${idSearchStr}%` });
-        const todayDebtCount = await debtCountQuery.getCount();
+
+        const todayDebtCount = await this.getDebtCountOfUser(userId);
 
         const entityList = itemList.map((item, idx) => {
             const paddedAutoIncrement = (todayDebtCount + idx + 1).toString().padStart(AUTO_INCREMENT_LENGTH, '0');

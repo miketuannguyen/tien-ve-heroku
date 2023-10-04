@@ -41,3 +41,7 @@ export type CommonSearchQuery = {
 export type IdListObject<T extends string | number> = {
     id_list: T[];
 };
+
+export type CountObject = {
+    count: number;
+};

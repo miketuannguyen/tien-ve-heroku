@@ -21,6 +21,7 @@ import { MessageModule } from './modules/message/message.module';
 import { MessagingModule } from './modules/messaging/messaging.module';
 import { OtpModule } from './modules/otp/otp.module';
 import ROUTES from './modules/routes';
+import { SettingModule } from './modules/setting/setting.module';
 import { UserController } from './modules/user/user.controller';
 import { UserModule } from './modules/user/user.module';
 import { RepositoryModule } from './repository/repository.module';
@@ -43,6 +44,7 @@ import { CONSTANTS } from './utils';
         BankModule,
         BankAccountModule,
         DebtModule,
+        SettingModule,
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],

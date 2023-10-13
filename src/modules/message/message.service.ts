@@ -70,12 +70,32 @@ export class MessageService extends BaseService {
             .createQueryBuilder('message')
             .select('message.*')
             .addSelect('DATE_FORMAT(message.send_date, \'%d/%m/%Y %H:%i:%s\') as send_date')
+            .addSelect('DATE_FORMAT(message.created_date, \'%d/%m/%Y %H:%i:%s\') as created_date')
             .where('message.is_deleted = 0')
             .groupBy('message.id')
             .orderBy('message.send_date', 'DESC');
 
         if (Helpers.isString(params.debt_id)) {
             query.andWhere('message.debt_id = :debt_id', { debt_id: params.debt_id });
+        }
+
+        if (Helpers.isString(params.keyword)) {
+            query.andWhere(
+                `(
+                message.address LIKE :keyword OR
+                message.phone LIKE :keyword OR
+                message.body LIKE :keyword
+            )`,
+                { keyword: `%${params.keyword}%` },
+            );
+        }
+
+        if (Helpers.isString(params.start_date)) {
+            query.andWhere('message.created_date >= :start_date', { start_date: `${params.start_date} 00:00:00` });
+        }
+
+        if (Helpers.isString(params.end_date)) {
+            query.andWhere('message.created_date <= :end_date', { end_date: `${params.end_date} 23:59:59` });
         }
 
         if (params.receive_user_id) {

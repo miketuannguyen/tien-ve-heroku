@@ -28,6 +28,10 @@ export class DebtEntity extends BaseEntity {
     @AutoMap()
         amount: number;
 
+    @Column({ type: 'int', default: 0 })
+    @AutoMap()
+        remind_count: number;
+
     @Column({ type: 'varchar', length: 255 })
     @AutoMap()
         note: string;

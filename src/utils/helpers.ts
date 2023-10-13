@@ -119,6 +119,7 @@ export default class Helpers {
         let otp = '';
 
         for (let i = 0; i < length; i++) {
+            // ! use crypto random here because math.random is not cryptically secured
             const randomIndex = Math.floor(Math.random() * digits.length);
             otp += digits[randomIndex];
         }
@@ -175,5 +176,16 @@ export default class Helpers {
     public static isObjectValue(val: any, obj: { [key: string]: any }) {
         const values = Object.values(obj);
         return values.includes(val);
+    }
+
+    /**
+     * Get the string which is the formatted number
+     * @param num - any number
+     * @returns formatted number
+     */
+    static formatNumber(num: number): string {
+        if (!num) return '0';
+        const _moneyAmount = parseFloat(`${num}`);
+        return new Intl.NumberFormat('en-US').format(_moneyAmount);
     }
 }

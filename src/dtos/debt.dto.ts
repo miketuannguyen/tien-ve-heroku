@@ -8,6 +8,7 @@ export class DebtDTO {
     @AutoMap() payer_name: string;
     @AutoMap() payer_phone: string;
     @AutoMap() amount: number;
+    @AutoMap() remind_count: number;
     @AutoMap() note: string;
     @AutoMap() is_deleted: 0 | 1;
     @AutoMap() created_date: string;
@@ -46,5 +47,11 @@ export type DebtSearchQuery = CommonSearchQuery & {
     start_date?: string;
     end_date?: string;
     is_paid?: boolean;
+    is_not_paid?: boolean;
+    id_list?: string[];
+};
+
+export type DebtRemindRequest = {
+    id_list?: string[];
     is_not_paid?: boolean;
 };

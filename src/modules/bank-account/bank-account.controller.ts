@@ -147,7 +147,7 @@ export class BankAccountController extends BaseController {
             const successRes = APIResponse.success<BankAccountDTO[]>(MESSAGES.SUCCESS.SUCCESS, result);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
-            this._logger.error(this.delete.name, e);
+            this._logger.error(this.deleteMultiple.name, e);
             const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR, []);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }

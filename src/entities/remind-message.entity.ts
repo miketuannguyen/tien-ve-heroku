@@ -2,39 +2,39 @@ import { AutoMap } from '@automapper/classes';
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
-@Entity('m_users')
-export class UserEntity extends BaseEntity {
+@Entity('d_remind_messages')
+export class RemindMessageEntity extends BaseEntity {
     @PrimaryGeneratedColumn('increment', { type: 'bigint' })
     @AutoMap()
         id: number;
 
-    @Column({ type: 'varchar', length: 255, nullable: true })
+    @Column({ type: 'varchar', length: 255 })
     @AutoMap()
-        email: string;
+        receiver_name: string;
 
-    @Column({ type: 'varchar', length: BaseEntity.PHONE_ML, nullable: true })
+    @Column({ type: 'varchar', length: 20 })
     @AutoMap()
         phone: string;
 
-    @Column({ type: 'varchar', length: 255, nullable: true })
+    @Column({ type: 'text' })
     @AutoMap()
-        name: string;
+        body: string;
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'varchar', length: 25 })
     @AutoMap()
-        password: string;
+        debt_id: string;
 
-    @Column({ type: 'int', default: 0 })
+    @Column({ type: 'tinyint' })
     @AutoMap()
-        remind_count: number;
+        channel_type: number;
 
-    @Column({ type: 'int', default: 0 })
+    @Column({ type: 'tinyint' })
     @AutoMap()
-        max_remind_count: number;
+        status: number;
 
-    @Column({ type: 'tinyint', default: 1 })
+    @Column({ type: 'tinyint', default: 0 })
     @AutoMap()
-        is_active: 0 | 1;
+        is_deleted: 0 | 1;
 
     @CreateDateColumn({ type: 'datetime' })
     @AutoMap()

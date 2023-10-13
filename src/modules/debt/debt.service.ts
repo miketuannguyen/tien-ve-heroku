@@ -5,6 +5,7 @@ import { DebtEntity } from 'src/entities';
 import { BaseService } from 'src/includes';
 import { DebtRepository } from 'src/repository';
 import { CONSTANTS, Helpers, mapper } from 'src/utils';
+import { In } from 'typeorm';
 
 @Injectable()
 export class DebtService extends BaseService {
@@ -69,6 +70,21 @@ export class DebtService extends BaseService {
             .groupBy('debt.id')
             .orderBy('debt.id', 'DESC');
 
+        if (Helpers.isFilledArray(params.id_list)) {
+            query.andWhere('debt.id IN (:...id_list)', { id_list: params.id_list });
+        }
+
+        if (Helpers.isString(params.keyword)) {
+            query.andWhere(
+                `(
+                debt.id LIKE :keyword OR
+                debt.payer_name LIKE :keyword OR
+                bank_account.account_number LIKE :keyword
+            )`,
+                { keyword: `%${params.keyword}%` },
+            );
+        }
+
         if (params?.min_amount) {
             query.andWhere('debt.amount >= :min_amount', { min_amount: Number(params?.min_amount) || 0 });
         }
@@ -101,6 +117,14 @@ export class DebtService extends BaseService {
 
         const list = await query.getRawMany<DebtListDTO>();
         return Helpers.isFilledArray(list) ? list : [];
+    }
+
+    public async getListByIdList(idList: string[]) {
+        if (!Helpers.isFilledArray(idList)) return [];
+
+        const list = await this._debtRepo.findBy({ id: In(idList) });
+
+        return list.map((item) => mapper.map(item, DebtEntity, DebtDTO));
     }
 
     public async getTotal(params: DebtSearchQuery, userId: number) {
@@ -162,5 +186,18 @@ export class DebtService extends BaseService {
 
         const item = await query.getRawOne<DebtDetailDTO>();
         return item ?? null;
+    }
+
+    public async deleteMultiple(idList: string[]) {
+        if (!Helpers.isFilledArray(idList)) return [];
+
+        const itemList = await this._debtRepo.findBy({ id: In(idList) });
+        if (!Helpers.isFilledArray(idList)) return [];
+
+        itemList.forEach((item) => (item.is_deleted = 1));
+
+        await this._debtRepo.save(itemList);
+
+        return itemList.map((item) => mapper.map(item, DebtEntity, DebtDTO));
     }
 }

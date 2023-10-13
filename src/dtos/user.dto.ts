@@ -8,6 +8,8 @@ export class UserDTO {
     @AutoMap() phone: string;
     @AutoMap() name: string;
     @AutoMap() password: string;
+    @AutoMap() remind_count: number;
+    @AutoMap() max_remind_count: number;
     @AutoMap() is_active: 0 | 1;
     @AutoMap() created_date: string;
     @AutoMap() updated_date: string;

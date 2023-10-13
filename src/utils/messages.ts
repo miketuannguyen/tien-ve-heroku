@@ -34,6 +34,8 @@ const MESSAGES = {
         ERR_SEND_DEBT_ANNOUNCEMENT: 'err_send_debt_announcement',
         ERR_EMAIL_PHONE_EXISTS: 'err_email_phone_exists',
         ERR_PASSWORD_NOT_CORRECT: 'err_password_not_correct',
+        ERR_OVER_MAX_REMIND_COUNT: 'err_over_max_remind_count',
+        ERR_NO_DEBT_NOT_PAID: 'err_no_debt_not_paid',
     },
 } as const;
 

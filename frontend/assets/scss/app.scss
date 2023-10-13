@@ -210,11 +210,12 @@ img.square-image {
     color: $primaryColor;
 }
 
-.bank-account-status {
+.status-tag {
     border-radius: 12px;
     display: flex;
     text-wrap: nowrap;
     align-items: center;
+    justify-content: center;
     padding: 0.25rem 0.5rem;
 
     .dot {
@@ -225,7 +226,7 @@ img.square-image {
     }
 }
 
-.bank-account-status.deactivated {
+.status-tag.danger {
     background-color: #FEE2E2;
     color: #7F1D1D;
 
@@ -234,7 +235,7 @@ img.square-image {
     }
 }
 
-.bank-account-status.not-activated {
+.status-tag.warning {
     background-color: #FEF9C3;
     color: #713F12;
 
@@ -243,7 +244,7 @@ img.square-image {
     }
 }
 
-.bank-account-status.activated {
+.status-tag.success {
     background-color: #DCFCE7;
     color: #14532D;
 
@@ -270,5 +271,23 @@ ul.nav.nav-tabs.nav-tabs-underline {
             border-bottom: 2px solid $primaryColor;
             color: $primaryColor;
         }
+    }
+}
+
+.linear-progress-bar .progress-bar {
+    background: linear-gradient(269.49deg, #F69063 0%, #FF008C 100%);
+}
+
+.modal-header {
+    .modal-header-left-button {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .modal-header-right-button {
+        position: absolute;
+        top: 0;
+        right: 0;
     }
 }

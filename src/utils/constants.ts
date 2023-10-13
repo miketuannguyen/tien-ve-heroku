@@ -17,8 +17,8 @@ const CONSTANTS = {
     MYSQL_DATETIME_FORMAT: 'YYYY-MM-DD HH:mm:ss',
     FRONTEND_DIR: 'frontend',
     SETTING_FIELD_NAMES: {
-        INVOICE_ADDRESS: 'invoice_address',
-        INVOICE_PHONE: 'invoice_phone',
+        UPGRADE_NOTE: 'debt_remind_message_template',
+        REMIND_MESSAGE_TEMPLATE: 'remind_message_template',
     },
     OTP: {
         LENGTH: 6,
@@ -39,7 +39,8 @@ const CONSTANTS = {
         LENGTH: 21,
     },
     VN_PHONE_CODE: '84+84',
-    ESMS_URL: { // ! move to .env
+    ESMS_URL: {
+        // ! move to .env
         OTP_SMS: 'http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_post_json/',
     },
     BANK_ACCOUNT_STATUSES: {
@@ -49,6 +50,21 @@ const CONSTANTS = {
         NOT_ACTIVATED: 0,
         /** Đã kích hoạt */
         ACTIVATED: 1,
+    },
+    REMIND_MESSAGE: {
+        CHANNEL_TYPE: {
+            ZALO: 1,
+            SMS: 2,
+        },
+        STATUS: {
+            FAIL: -1,
+            SENDING: 0,
+            SUCCESS: 1,
+        },
+    },
+    MESSAGE_TEMPLATE_ALIASES: {
+        RECEIVER_NAME: 'receiver_name',
+        AMOUNT: 'amount',
     },
 } as const;
 Helpers.deepFreeze(CONSTANTS);

@@ -5,3 +5,4 @@ export * from './otp.entity';
 export * from './user.entity';
 export * from './debt.entity';
 export * from './setting.entity';
+export * from './remind-message.entity';

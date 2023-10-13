@@ -44,6 +44,8 @@ const ROUTES = {
         LIST: '',
         DETAIL: ':id',
         CREATE_MULTIPLE: 'multiple',
+        REMIND: 'remind',
+        DELETE_MULTIPLE: '',
         DELETE: ':id',
     },
     SETTING: {

@@ -11,6 +11,8 @@ import { MessageDTO } from './message.dto';
 import { OtpDTO } from './otp.dto';
 import { SettingDTO } from './setting.dto';
 import { UserDTO } from './user.dto';
+import { RemindMessageEntity } from 'src/entities/remind-message.entity';
+import { RemindMessageDTO } from './remind-message.dto';
 
 export * from './bank-account.dto';
 export * from './bank.dto';
@@ -19,6 +21,7 @@ export * from './message.dto';
 export * from './otp.dto';
 export * from './setting.dto';
 export * from './user.dto';
+export * from './remind-message.dto';
 
 /**
  * Initialize mapper
@@ -44,4 +47,7 @@ export const initMapper = () => {
 
     createMap(mapper, SettingEntity, SettingDTO);
     createMap(mapper, SettingDTO, SettingEntity);
+
+    createMap(mapper, RemindMessageEntity, RemindMessageDTO);
+    createMap(mapper, RemindMessageDTO, RemindMessageEntity);
 };

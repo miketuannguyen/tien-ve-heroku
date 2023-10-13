@@ -186,6 +186,11 @@ table.table-header-border-none thead tr th {
     border-bottom: none !important;
 }
 
+table.table-border-none tr,
+td {
+    border: none !important;
+}
+
 table.table-header-font-weight-normal thead tr th {
     font-weight: normal;
 }
@@ -200,6 +205,10 @@ table input.cell-checkbox {
 .icheck-primary>input:first-child:checked+label::before {
     background-color: $primaryColor !important;
     border-color: $primaryColor !important;
+}
+
+.modal-dialog {
+    overflow-y: initial !important
 }
 
 .modal-header,
@@ -254,4 +263,12 @@ table input.cell-checkbox {
 
 .a-fw-900 {
     font-weight: 900;
+}
+
+.box-shadow-none {
+    box-shadow: none !important;
+}
+
+.timeline.primary::before {
+    background-color: $primaryColor !important;
 }

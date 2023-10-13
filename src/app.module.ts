@@ -26,6 +26,7 @@ import { UserController } from './modules/user/user.controller';
 import { UserModule } from './modules/user/user.module';
 import { RepositoryModule } from './repository/repository.module';
 import { CONSTANTS } from './utils';
+import { RemindMessageModule } from './modules/remind-message/remind-message.module';
 
 @Module({
     imports: [
@@ -45,6 +46,7 @@ import { CONSTANTS } from './utils';
         BankAccountModule,
         DebtModule,
         SettingModule,
+        RemindMessageModule,
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],

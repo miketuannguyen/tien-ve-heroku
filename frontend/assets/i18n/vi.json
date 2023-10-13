@@ -72,7 +72,11 @@
         "confirm_entered_info": "Xác nhận thông tin đã nhập",
         "input_file": "Nhập file",
         "download": "Tải xuống",
-        "input_excel_file": "Nhập file Excel"
+        "input_excel_file": "Nhập file Excel",
+        "download_excel_file": "Download Excel File",
+        "checked_list": "Danh sách đã chọn",
+        "not_completed_list": "Danh sách chưa hoàn tất",
+        "see_more": "Xem thêm"
     },
     "validation": {
         "required": "Vui lòng nhập {{item}}",
@@ -90,6 +94,7 @@
     },
     "message": {
         "success": "Thành công",
+        "export_file_successfully": "Xuất file thành công",
         "err_internal_server_error": "Lỗi nội bộ máy chủ. Vui lòng thử lại sau!",
         "err_unknown_client_error": "Lỗi máy khách không xác định. Vui lòng thử lại sau!",
         "err_login": "Thông tin đăng nhập không chính xác",
@@ -114,6 +119,8 @@
         "err_phone_not_exists": "Số điện thoại không tồn tại.",
         "valid_otp": "Mã xác nhận hợp lệ.",
         "err_send_debt_announcement": "Công nợ đã được nhập. Lỗi gửi tin nhắn nhắc nợ.",
-        "err_password_not_correct": "Mật khẩu không đúng."
+        "err_password_not_correct": "Mật khẩu không đúng.",
+        "err_over_max_remind_count": "Đã vượt quá số lượng tin nhắn có thể gửi.",
+        "err_no_debt_not_paid": "Không có công nợ nào chưa được hoàn thành."
     }
 }

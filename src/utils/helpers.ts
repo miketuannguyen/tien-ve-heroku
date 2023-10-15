@@ -98,17 +98,17 @@ export default class Helpers {
         return dayjs(date).format(toFormat);
     }
 
-    static getDateListInRange(startDate: string, endDate: string, unit: 'day' | 'month' = 'day') {
+    static getDateListInRange(startDate: string, endDate: string, toFormat = 'DD/MM/YYYY', unit: 'day' | 'month' = 'day') {
         const start = dayjs(startDate).startOf(unit);
         const end = dayjs(endDate).startOf(unit);
 
         const dateList: string[] = [];
 
-        let currentMonth = start;
+        let currentMonthDay = start;
 
-        while (currentMonth.isBefore(end, unit) || currentMonth.isSame(end, unit)) {
-            dateList.push(currentMonth.format('MM/YYYY'));
-            currentMonth = currentMonth.add(1, unit);
+        while (currentMonthDay.isBefore(end, unit) || currentMonthDay.isSame(end, unit)) {
+            dateList.push(currentMonthDay.format(toFormat));
+            currentMonthDay = currentMonthDay.add(1, unit);
         }
 
         return dateList;

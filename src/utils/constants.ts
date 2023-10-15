@@ -19,6 +19,7 @@ const CONSTANTS = {
     SETTING_FIELD_NAMES: {
         UPGRADE_NOTE: 'debt_remind_message_template',
         REMIND_MESSAGE_TEMPLATE: 'remind_message_template',
+        APP_LINK: 'app_link',
     },
     OTP: {
         LENGTH: 6,

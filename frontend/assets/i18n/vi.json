@@ -76,7 +76,12 @@
         "download_excel_file": "Download Excel File",
         "checked_list": "Danh sách đã chọn",
         "not_completed_list": "Danh sách chưa hoàn tất",
-        "see_more": "Xem thêm"
+        "see_more": "Xem thêm",
+        "download_app": "Tải ứng dụng",
+        "scan_qr_code": "Quét mã QR",
+        "add_new": "Thêm mới",
+        "time": "Thời gian",
+        "content": "Nội dung"
     },
     "validation": {
         "required": "Vui lòng nhập {{item}}",

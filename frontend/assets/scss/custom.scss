@@ -272,3 +272,11 @@ table input.cell-checkbox {
 .timeline.primary::before {
     background-color: $primaryColor !important;
 }
+
+.dropdown-item {
+
+    &.active,
+    &:active {
+        background-color: $primaryColor;
+    }
+}

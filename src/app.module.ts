@@ -27,6 +27,7 @@ import { UserModule } from './modules/user/user.module';
 import { RepositoryModule } from './repository/repository.module';
 import { CONSTANTS } from './utils';
 import { RemindMessageModule } from './modules/remind-message/remind-message.module';
+import { MessageController } from './modules/message/message.controller';
 
 @Module({
     imports: [
@@ -81,16 +82,23 @@ export class AppModule {
      */
     configure(consumer: MiddlewareConsumer) {
         const authExcludeRouteList = [ROUTES.AUTH.LOGIN, ROUTES.AUTH.REGISTER, ROUTES.AUTH.VALIDATE_FORGOT_PASSWORD_OTP];
-        const userExcludeRouteList = [ROUTES.USER.GET_BY_EMAIL_PHONE];
         consumer
             .apply(AuthMiddleware)
             .exclude(...authExcludeRouteList.map((route) => `/${ROUTES.AUTH.MODULE}/${route}`))
             .forRoutes(AuthController);
+
+        const userExcludeRouteList = [ROUTES.USER.GET_BY_EMAIL_PHONE];
         consumer
             .apply(AuthMiddleware)
             .exclude(...userExcludeRouteList.map((route) => `/${ROUTES.USER.MODULE}/${route}`))
             .forRoutes(UserController);
 
-        consumer.apply(AuthMiddleware).forRoutes(BankController, BankAccountController, DebtController);
+        const messageExcludeRouteList = [ROUTES.MESSAGE.CREATE];
+        consumer
+            .apply(AuthMiddleware)
+            .exclude(...messageExcludeRouteList.map((route) => `/${ROUTES.MESSAGE.MODULE}/${route}`))
+            .forRoutes(UserController);
+
+        consumer.apply(AuthMiddleware).forRoutes(BankController, BankAccountController, DebtController, MessageController);
     }
 }

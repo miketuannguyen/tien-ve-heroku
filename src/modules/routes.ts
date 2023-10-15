@@ -14,7 +14,17 @@ const ROUTES = {
         MODULE: 'message',
         CREATE: '',
         LIST: '',
+        DETAIL: ':id',
+        DELETE_MULTIPLE: '',
         UPDATE_DEBT_ID: ':id/update-debt-id',
+        AMOUNT_MONTHLY_STATS: 'amount-monthly-stats',
+        AMOUNT_DAILY_STATS: 'amount-daily-stats',
+    },
+    REMIND_MESSAGE: {
+        MODULE: 'remind-message',
+        LIST: '',
+        DETAIL: ':id',
+        DELETE_MULTIPLE: '',
     },
     USER: {
         MODULE: 'user',

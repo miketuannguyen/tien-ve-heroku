@@ -1,7 +1,15 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Put, Query, Res, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Req, Res, UsePipes } from '@nestjs/common';
 import * as dayjs from 'dayjs';
 import { Response } from 'express';
-import { BankAccountDTO, CreateMessageDTO, MessageDTO, MessageSearchQuery } from 'src/dtos';
+import {
+    BankAccountDTO,
+    CreateMessageDTO,
+    MessageAmountStatsDTO,
+    MessageDTO,
+    MessageDetailDTO,
+    MessageSearchQuery,
+    MessageStatsQuery,
+} from 'src/dtos';
 import { BaseController } from 'src/includes';
 import { ValidationPipe } from 'src/pipes';
 import { APIListResponse, APIResponse, CONSTANTS, Helpers, MESSAGES } from 'src/utils';
@@ -11,6 +19,7 @@ import ROUTES from '../routes';
 import { BankAccountService } from './../bank-account/bank-account.service';
 import * as MessageSchemas from './message.schemas';
 import { MessageService } from './message.service';
+import { AuthenticatedRequest, IdListObject } from 'src/utils/types';
 
 @Controller(ROUTES.MESSAGE.MODULE)
 export class MessageController extends BaseController {
@@ -107,8 +116,9 @@ export class MessageController extends BaseController {
     }
 
     @Get(ROUTES.MESSAGE.LIST)
-    public async getList(@Res() res: Response<APIListResponse<MessageDTO>>, @Query() query: MessageSearchQuery) {
+    public async getList(@Req() req: AuthenticatedRequest, @Res() res: Response<APIListResponse<MessageDTO>>, @Query() query: MessageSearchQuery) {
         try {
+            query.receive_user_id = req.userPayload.id;
             const total = await this._messageService.getTotal(query);
             let list: MessageDTO[] = [];
             if (total > 0) {
@@ -124,6 +134,24 @@ export class MessageController extends BaseController {
         } catch (e) {
             this._logger.error(this.getList.name, e);
             const errRes = APIListResponse.error<MessageDTO>(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Get(ROUTES.MESSAGE.DETAIL)
+    public async getDetail(@Param('id') id: number, @Res() res: Response<APIResponse<MessageDetailDTO | undefined>>) {
+        try {
+            const item = await this._messageService.getDetail(id);
+            if (!item) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_NOT_FOUND);
+                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+            }
+
+            const successRes = APIResponse.success(MESSAGES.SUCCESS.SUCCESS, item);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.getDetail.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
     }
@@ -151,6 +179,59 @@ export class MessageController extends BaseController {
         } catch (e) {
             this._logger.error(this.updateDebtId.name, e);
             const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Get(ROUTES.MESSAGE.AMOUNT_MONTHLY_STATS)
+    public async getAmountMonthlyStats(
+        @Req() req: AuthenticatedRequest,
+        @Res() res: Response<APIResponse<MessageAmountStatsDTO[]>>,
+        @Query() query: MessageStatsQuery,
+    ) {
+        try {
+            const result = await this._messageService.getAmountMonthlyStats(query, req.userPayload.id);
+            const successRes = APIResponse.success(MESSAGES.SUCCESS.SUCCESS, result);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.getAmountMonthlyStats.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR, []);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Get(ROUTES.MESSAGE.AMOUNT_DAILY_STATS)
+    public async getAmountDailyStats(
+        @Req() req: AuthenticatedRequest,
+        @Res() res: Response<APIResponse<MessageAmountStatsDTO[]>>,
+        @Query() query: MessageStatsQuery,
+    ) {
+        try {
+            const result = await this._messageService.getAmountDailyStats(query, req.userPayload.id);
+            const successRes = APIResponse.success(MESSAGES.SUCCESS.SUCCESS, result);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.getAmountDailyStats.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR, []);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Delete(ROUTES.MESSAGE.DELETE_MULTIPLE)
+    public async deleteMultiple(@Query() query: IdListObject<number>, @Res() res: Response<APIResponse<MessageDTO[]>>) {
+        try {
+            const idList = query.id_list;
+            const result = await this._messageService.deleteMultiple(idList);
+            if (!Helpers.isFilledArray(result)) {
+                const errRes = APIResponse.error<MessageDTO[]>(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR, []);
+                return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+            }
+
+            const successRes = APIResponse.success(MESSAGES.SUCCESS.SUCCESS, result);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.deleteMultiple.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR, []);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
     }
